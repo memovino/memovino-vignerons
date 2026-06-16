@@ -956,6 +956,140 @@ body.show-sticky-brand .step-progress{
 }
 
 </style>
+<style>
+
+/* ---------- V8 : EFFACER FORMULAIRE + MODAL ---------- */
+.clear-form-btn{
+  border:1.5px solid rgba(155,59,46,.65);
+  background:transparent;
+  color:var(--oxblood);
+  border-radius:999px;
+  padding:12px 18px;
+  font-family:var(--ui);
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+  transition:background .15s ease,color .15s ease,border-color .15s ease;
+}
+.clear-form-btn:hover{
+  background:#F6EAE7;
+  border-color:var(--oxblood);
+}
+.clear-modal{
+  position:fixed;
+  inset:0;
+  z-index:200;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(30,38,31,.48);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.clear-modal.open{
+  display:flex;
+}
+.clear-modal-card{
+  width:min(430px,100%);
+  background:var(--paper);
+  border:1px solid var(--sand);
+  border-radius:var(--radius);
+  box-shadow:0 26px 70px -30px rgba(30,38,31,.55);
+  padding:26px 24px 22px;
+  text-align:center;
+}
+.clear-modal-icon{
+  font-size:28px;
+  line-height:1;
+  margin-bottom:10px;
+}
+.clear-modal-card h2{
+  font-family:var(--display);
+  font-weight:500;
+  font-size:24px;
+  line-height:1.15;
+  margin:0 0 10px;
+  color:var(--ink);
+}
+.clear-modal-card p{
+  margin:0 auto;
+  color:var(--forest-soft);
+  font-size:14px;
+  max-width:34ch;
+}
+.clear-modal-warning{
+  margin-top:10px !important;
+  color:var(--oxblood) !important;
+  font-weight:700;
+}
+.clear-modal-actions{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+}
+.clear-modal-actions button{
+  flex:1;
+  border-radius:999px;
+  padding:12px 14px;
+  font-family:var(--ui);
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+}
+.clear-cancel{
+  border:1.5px solid var(--forest);
+  color:var(--forest);
+  background:transparent;
+}
+.clear-confirm{
+  border:1.5px solid var(--oxblood);
+  color:#fff;
+  background:var(--oxblood);
+}
+.reset-toast{
+  position:fixed;
+  left:50%;
+  bottom:22px;
+  transform:translate(-50%,18px);
+  z-index:220;
+  background:var(--forest);
+  color:var(--parchment);
+  border-radius:999px;
+  padding:11px 16px;
+  font-size:13px;
+  font-weight:700;
+  opacity:0;
+  pointer-events:none;
+  box-shadow:0 16px 32px -20px rgba(30,38,31,.65);
+  transition:opacity .2s ease,transform .2s ease;
+}
+.reset-toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+@media (max-width:560px){
+  .wizard-actions{
+    flex-wrap:wrap;
+  }
+  .clear-form-btn{
+    width:100%;
+    order:3;
+    padding:11px 14px;
+    font-size:13px;
+  }
+  .nav-btn.back{
+    order:1;
+  }
+  .nav-btn.next{
+    order:2;
+  }
+  .clear-modal-actions{
+    flex-direction:column;
+  }
+}
+
+</style>
 </head>
 <body>
 
@@ -1176,6 +1310,7 @@ body.show-sticky-brand .step-progress{
 
         <!-- ACTIONS -->
         <div class="wizard-actions">
+          <button type="button" class="clear-form-btn" data-clear-form>Effacer le formulaire</button>
           <button type="button" class="nav-btn back" data-prev>Retour</button>
           <button type="button" class="nav-btn next" data-next>Suivant</button>
         </div>
@@ -1745,6 +1880,137 @@ $('#form').addEventListener('submit', async e=>{
   window.addEventListener('scroll', updateStartScrollState, {passive:true});
   window.addEventListener('resize', updateStartScrollState);
   document.addEventListener('DOMContentLoaded', updateStartScrollState);
+})();
+</script>
+
+
+<div class="clear-modal" data-clear-modal aria-hidden="true">
+  <div class="clear-modal-card" role="dialog" aria-modal="true" aria-labelledby="clearModalTitle">
+    <div class="clear-modal-icon">⚠️</div>
+    <h2 id="clearModalTitle">Supprimer le formulaire ?</h2>
+    <p>Toutes les informations saisies, les cuvées ajoutées et les données sauvegardées localement seront supprimées.</p>
+    <p class="clear-modal-warning">Cette action est irréversible.</p>
+    <div class="clear-modal-actions">
+      <button type="button" class="clear-cancel" data-clear-cancel>Annuler</button>
+      <button type="button" class="clear-confirm" data-clear-confirm>Oui, recommencer</button>
+    </div>
+  </div>
+</div>
+<div class="reset-toast" data-reset-toast>✓ Formulaire réinitialisé avec succès</div>
+
+
+<script>
+(function(){
+  const STORAGE_KEY = 'memovino_vignerons_form_autosave_v3';
+
+  function openClearModal(){
+    const modal = document.querySelector('[data-clear-modal]');
+    if(!modal) return;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden','false');
+  }
+
+  function closeClearModal(){
+    const modal = document.querySelector('[data-clear-modal]');
+    if(!modal) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden','true');
+  }
+
+  function showToast(){
+    const toast = document.querySelector('[data-reset-toast]');
+    if(!toast) return;
+    toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'), 3000);
+  }
+
+  function clearDynamicRows(){
+    document.querySelectorAll('[data-repeater]').forEach(container=>{
+      container.innerHTML = '';
+    });
+
+    // Recrée une première cuvée/caviste si le script original expose les boutons d'ajout.
+    document.querySelectorAll('[data-add]').forEach(btn=>{
+      try{ btn.click(); }catch(e){}
+    });
+  }
+
+  function resetAllFields(){
+    const form = document.getElementById('form');
+    if(!form) return;
+
+    form.querySelectorAll('input,textarea,select').forEach(el=>{
+      if(el.type === 'checkbox' || el.type === 'radio'){
+        el.checked = false;
+      }else{
+        el.value = '';
+      }
+    });
+
+    form.querySelectorAll('.files').forEach(list=>list.innerHTML = '');
+    form.querySelectorAll('.field.invalid').forEach(field=>field.classList.remove('invalid'));
+  }
+
+  function goToFirstStep(){
+    const steps = Array.from(document.querySelectorAll('.form-step'));
+    steps.forEach((s,i)=>s.classList.toggle('active', i === 0));
+
+    const line = document.querySelector('[data-step-line]');
+    const label = document.querySelector('[data-step-label]');
+    if(line && steps.length) line.style.width = (100 / steps.length) + '%';
+    if(label && steps[0]) label.textContent = steps[0].dataset.stepTitle || 'Informations du domaine';
+
+    const prev = document.querySelector('[data-prev]');
+    const next = document.querySelector('[data-next]');
+    if(prev) prev.disabled = true;
+    if(next){
+      next.style.display = '';
+      next.textContent = 'Suivant';
+    }
+    document.body.classList.remove('on-final-step');
+
+    const sheet = document.querySelector('.sheet');
+    if(sheet) sheet.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  function clearFormCompletely(){
+    try{
+      localStorage.removeItem(STORAGE_KEY);
+      // Nettoie aussi toute ancienne clé éventuelle Memovino liée au formulaire.
+      Object.keys(localStorage).forEach(k=>{
+        if(k.toLowerCase().includes('memovino') && k.toLowerCase().includes('vignerons')){
+          localStorage.removeItem(k);
+        }
+      });
+    }catch(e){}
+
+    clearDynamicRows();
+    resetAllFields();
+    goToFirstStep();
+    closeClearModal();
+    showToast();
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    const clearBtn = document.querySelector('[data-clear-form]');
+    const cancelBtn = document.querySelector('[data-clear-cancel]');
+    const confirmBtn = document.querySelector('[data-clear-confirm]');
+    const modal = document.querySelector('[data-clear-modal]');
+
+    if(clearBtn) clearBtn.addEventListener('click', openClearModal);
+    if(cancelBtn) cancelBtn.addEventListener('click', closeClearModal);
+    if(confirmBtn) confirmBtn.addEventListener('click', clearFormCompletely);
+
+    if(modal){
+      modal.addEventListener('click', function(e){
+        if(e.target === modal) closeClearModal();
+      });
+    }
+
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeClearModal();
+    });
+  });
 })();
 </script>
 

@@ -2237,6 +2237,250 @@ body:not(.form-started) .step-progress{
 }
 
 </style>
+<style>
+
+/* ---------- V19 : STABILISATION COMPLÈTE MOBILE / AUCUN ESPACE QUI SE RECRÉE AU SCROLL ---------- */
+
+/*
+  Principe V19 :
+  - quand le formulaire est commencé, le hero disparaît totalement ;
+  - le bandeau logos est fixe ;
+  - la progression est fixe ;
+  - le formulaire commence toujours à une distance fixe ;
+  - aucune règle liée à .has-scrolled ou .show-sticky-brand ne peut rajouter du padding interne.
+*/
+
+body.form-started .hero{
+  display:none !important;
+}
+
+body.form-started .sticky-brand{
+  display:block !important;
+  position:fixed !important;
+  top:0 !important;
+  left:0 !important;
+  right:0 !important;
+  z-index:100 !important;
+  opacity:1 !important;
+  transform:translate3d(0,0,0) !important;
+  pointer-events:auto !important;
+}
+
+body.form-started .sticky-brand-title{
+  display:none !important;
+}
+
+body.form-started .step-progress{
+  display:block !important;
+  position:fixed !important;
+  left:0 !important;
+  right:0 !important;
+  z-index:99 !important;
+  margin:0 !important;
+  background:rgba(252,251,246,.99) !important;
+  border-bottom:1px solid var(--sand) !important;
+  box-shadow:0 14px 28px -26px rgba(30,38,31,.55) !important;
+  overflow:hidden !important;
+}
+
+body.form-started .step-progress-line{
+  height:3px !important;
+  margin:0 auto !important;
+  max-width:var(--maxw) !important;
+}
+
+body.form-started .step-progress-label{
+  display:block !important;
+  max-width:var(--maxw) !important;
+  text-align:left !important;
+  font-weight:700 !important;
+  color:var(--forest-soft) !important;
+  overflow:visible !important;
+  white-space:normal !important;
+}
+
+/* Desktop/tablette */
+@media (min-width:561px){
+  body.form-started .sticky-brand{
+    height:64px !important;
+  }
+
+  body.form-started .sticky-brand-inner{
+    height:64px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:32px !important;
+    padding:0 18px !important;
+  }
+
+  body.form-started .sticky-brand .memovino{
+    width:92px !important;
+    max-height:42px !important;
+  }
+
+  body.form-started .sticky-brand .vignerons{
+    width:98px !important;
+    max-height:42px !important;
+  }
+
+  body.form-started .sticky-brand .sep{
+    height:30px !important;
+  }
+
+  body.form-started .step-progress{
+    top:64px !important;
+    height:58px !important;
+    padding:10px 18px 11px !important;
+  }
+
+  body.form-started .step-progress-label{
+    margin:13px auto 0 !important;
+    font-size:11px !important;
+    line-height:1.25 !important;
+  }
+
+  body.form-started .wrap{
+    display:block !important;
+    padding-top:132px !important;
+  }
+}
+
+/* Mobile : dimensions fixes et stables */
+@media (max-width:560px){
+  body.form-started .sticky-brand{
+    height:58px !important;
+    min-height:58px !important;
+    max-height:58px !important;
+  }
+
+  body.form-started .sticky-brand-inner{
+    height:58px !important;
+    min-height:58px !important;
+    max-height:58px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:16px !important;
+    padding:0 12px !important;
+    overflow:hidden !important;
+  }
+
+  body.form-started .sticky-brand .memovino{
+    width:78px !important;
+    max-width:34vw !important;
+    max-height:38px !important;
+  }
+
+  body.form-started .sticky-brand .vignerons{
+    width:84px !important;
+    max-width:34vw !important;
+    max-height:38px !important;
+  }
+
+  body.form-started .sticky-brand .sep{
+    height:28px !important;
+    flex:0 0 1px !important;
+  }
+
+  body.form-started .step-progress{
+    top:58px !important;
+    height:54px !important;
+    min-height:54px !important;
+    max-height:54px !important;
+    padding:8px 16px 8px !important;
+  }
+
+  body.form-started .step-progress-label{
+    margin:10px 0 0 !important;
+    font-size:11px !important;
+    line-height:1.22 !important;
+    height:auto !important;
+    max-height:none !important;
+  }
+
+  /* Distance fixe entre le haut de page et la carte : ne varie plus au scroll */
+  body.form-started .wrap{
+    display:block !important;
+    padding-top:122px !important;
+    padding-left:12px !important;
+    padding-right:12px !important;
+  }
+
+  body.form-started .sheet{
+    margin-top:0 !important;
+    padding-top:18px !important;
+    padding-left:14px !important;
+    padding-right:14px !important;
+  }
+
+  /* Neutralisation des anciennes règles qui recréaient l'espace */
+  body.form-started .form-step,
+  body.form-started .form-step.active,
+  body.show-sticky-brand .form-step,
+  body.show-sticky-brand .form-step.active,
+  body.has-scrolled .form-step,
+  body.has-scrolled .form-step.active{
+    padding-top:0 !important;
+    margin-top:0 !important;
+    scroll-margin-top:122px !important;
+  }
+
+  body.form-started .form-step .section,
+  body.form-started .form-step.active .section,
+  body.show-sticky-brand .form-step .section,
+  body.show-sticky-brand .form-step.active .section{
+    padding-top:0 !important;
+    margin-top:0 !important;
+  }
+
+  body.form-started .section:first-of-type,
+  body.show-sticky-brand .section:first-of-type{
+    padding-top:0 !important;
+  }
+
+  body.form-started .sec-head{
+    margin-top:0 !important;
+    margin-bottom:18px !important;
+  }
+}
+
+@media (max-width:380px){
+  body.form-started .wrap{
+    padding-top:118px !important;
+  }
+
+  body.form-started .sticky-brand-inner{
+    gap:10px !important;
+  }
+
+  body.form-started .sticky-brand .memovino{
+    width:70px !important;
+  }
+
+  body.form-started .sticky-brand .vignerons{
+    width:76px !important;
+  }
+
+  body.form-started .step-progress{
+    padding-left:14px !important;
+    padding-right:14px !important;
+  }
+
+  body.form-started .step-progress-label{
+    font-size:10.5px !important;
+  }
+}
+
+/* Pendant l'accueil, on garde uniquement l'écran d'accueil */
+body:not(.form-started) .wrap,
+body:not(.form-started) .pagefoot,
+body:not(.form-started) .sticky-brand,
+body:not(.form-started) .step-progress{
+  display:none !important;
+}
+
+</style>
 </head>
 <body>
 
@@ -3375,6 +3619,117 @@ $('#form').addEventListener('submit', async e=>{
         startFormAtStepOne();
       }, true);
     }
+  });
+})();
+</script>
+
+
+<script>
+/* V19 : scroll et étapes stabilisés, sans recalcul d'espace au scroll */
+(function(){
+  function getSteps(){
+    return Array.from(document.querySelectorAll('.form-step'));
+  }
+
+  function updateProgressLabel(){
+    const steps = getSteps();
+    const label = document.querySelector('[data-step-label]');
+    const line = document.querySelector('[data-step-line]');
+    if(!steps.length) return;
+
+    let activeIndex = steps.findIndex(s => s.classList.contains('active'));
+    if(activeIndex < 0) activeIndex = 0;
+
+    if(line){
+      line.style.width = ((activeIndex + 1) / steps.length * 100) + '%';
+    }
+
+    if(label){
+      const title = steps[activeIndex].dataset.stepTitle || 'Informations du domaine';
+      label.textContent = 'Étape ' + (activeIndex + 1) + '/' + steps.length + ' • ' + title;
+    }
+  }
+
+  function scrollTopStable(){
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function forceNoExtraTopSpace(){
+    if(!document.body.classList.contains('form-started')) return;
+    document.body.classList.add('show-sticky-brand');
+    document.body.classList.add('has-scrolled');
+
+    const sheet = document.querySelector('.sheet');
+    if(sheet){
+      sheet.style.marginTop = '0';
+    }
+
+    document.querySelectorAll('.form-step, .form-step.active, .form-step .section').forEach(el=>{
+      el.style.paddingTop = '0';
+      el.style.marginTop = '0';
+    });
+  }
+
+  function startFormStable(){
+    document.body.classList.add('form-started');
+    document.body.classList.add('show-sticky-brand');
+    document.body.classList.add('has-scrolled');
+
+    const steps = getSteps();
+    steps.forEach((step,index)=>step.classList.toggle('active', index === 0));
+
+    const prev = document.querySelector('[data-prev]');
+    const next = document.querySelector('[data-next]');
+    if(prev) prev.disabled = true;
+    if(next){
+      next.style.display = '';
+      next.textContent = 'Suivant';
+    }
+
+    document.body.classList.remove('on-final-step');
+
+    updateProgressLabel();
+    forceNoExtraTopSpace();
+
+    setTimeout(function(){
+      window.scrollTo({top:0, behavior:'smooth'});
+      forceNoExtraTopSpace();
+      updateProgressLabel();
+    }, 60);
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    const btn = document.querySelector('[data-start-form]');
+    if(btn){
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        startFormStable();
+      }, true);
+    }
+
+    document.addEventListener('click', function(e){
+      if(e.target.closest('[data-next]') || e.target.closest('[data-prev]')){
+        setTimeout(function(){
+          forceNoExtraTopSpace();
+          updateProgressLabel();
+          scrollTopStable();
+        }, 90);
+      }
+    }, true);
+
+    window.addEventListener('scroll', function(){
+      requestAnimationFrame(forceNoExtraTopSpace);
+    }, {passive:true});
+
+    const observer = new MutationObserver(function(){
+      forceNoExtraTopSpace();
+      updateProgressLabel();
+    });
+
+    document.querySelectorAll('.form-step').forEach(step=>{
+      observer.observe(step, {attributes:true, attributeFilter:['class']});
+    });
   });
 })();
 </script>

@@ -324,6 +324,25 @@ img[alt*="MEMOVINO"]{
 }
 </style>
 
+<style>
+/* Correction logo Memovino : blanc net, aucune opacité */
+.crest img.memovino,
+.crest .memovino,
+img.memovino,
+img[alt="Memovino"],
+img[alt="MEMOVINO"],
+.sticky-logos img.memovino,
+.sticky-logos img[alt="Memovino"],
+.sticky-header img.memovino,
+.sticky-header img[alt="Memovino"]{
+  filter: brightness(0) invert(1) !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+.crest{
+  opacity: 1 !important;
+}
+</style>
 </head>
 <body>
 

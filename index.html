@@ -2481,6 +2481,161 @@ body:not(.form-started) .step-progress{
 }
 
 </style>
+<style>
+
+/* ---------- V20 : RESPONSIVE IOS/ANDROID + MINIATURES PHOTOS ---------- */
+html,
+body{
+  width:100% !important;
+  max-width:100% !important;
+  overflow-x:hidden !important;
+  overscroll-behavior-x:none;
+}
+
+*,
+*::before,
+*::after{
+  box-sizing:border-box !important;
+}
+
+img,
+svg,
+video,
+canvas{
+  max-width:100% !important;
+  height:auto;
+}
+
+.wrap,
+.sheet,
+.hero,
+.sticky-brand,
+.sticky-brand-inner,
+.step-progress,
+.form-step,
+.section,
+.grid,
+.field,
+.row-card,
+.rows,
+.footer-actions,
+.wizard-actions{
+  max-width:100% !important;
+  min-width:0 !important;
+}
+
+input,
+select,
+textarea,
+button{
+  max-width:100% !important;
+  min-width:0 !important;
+}
+
+.files li,
+.file-with-thumb{
+  display:flex !important;
+  align-items:center !important;
+  gap:9px !important;
+  min-width:0 !important;
+}
+
+.files .thumb,
+.file-with-thumb .thumb{
+  width:38px !important;
+  height:38px !important;
+  min-width:38px !important;
+  max-width:38px !important;
+  object-fit:cover !important;
+  border-radius:8px !important;
+  border:1px solid var(--sand) !important;
+  background:var(--field) !important;
+}
+
+.files .fn{
+  min-width:0 !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+
+.files .fs{
+  flex:0 0 auto !important;
+  white-space:nowrap !important;
+}
+
+@media (max-width:560px){
+  .wrap{
+    width:100% !important;
+    padding-left:12px !important;
+    padding-right:12px !important;
+  }
+
+  .sheet{
+    width:100% !important;
+    overflow:hidden !important;
+  }
+
+  .grid{
+    grid-template-columns:1fr !important;
+    width:100% !important;
+  }
+
+  .row-card .grid{
+    grid-template-columns:1fr !important;
+  }
+
+  .drop{
+    width:100% !important;
+  }
+
+  .wizard-actions{
+    width:100% !important;
+    gap:10px !important;
+  }
+
+  .nav-btn,
+  .clear-form-btn,
+  .submit{
+    max-width:100% !important;
+  }
+
+  .sticky-brand-inner{
+    max-width:100vw !important;
+    overflow:hidden !important;
+  }
+
+  body.form-started .step-progress{
+    max-width:100vw !important;
+    overflow:hidden !important;
+  }
+
+  body.form-started .step-progress-label{
+    max-width:calc(100vw - 32px) !important;
+  }
+
+  .files .thumb,
+  .file-with-thumb .thumb{
+    width:34px !important;
+    height:34px !important;
+    min-width:34px !important;
+    max-width:34px !important;
+  }
+}
+
+@media (max-width:380px){
+  .wrap{
+    padding-left:10px !important;
+    padding-right:10px !important;
+  }
+
+  .sheet{
+    padding-left:12px !important;
+    padding-right:12px !important;
+  }
+}
+
+</style>
 </head>
 <body>
 
@@ -3731,6 +3886,156 @@ $('#form').addEventListener('submit', async e=>{
       observer.observe(step, {attributes:true, attributeFilter:['class']});
     });
   });
+})();
+</script>
+
+
+<script>
+/* V20 : couleurs cuvées, millésime 1950-2026, miniatures photos, responsive stable */
+(function(){
+  const COLOR_OPTIONS = [
+    "Rouge",
+    "Blanc",
+    "Rosé",
+    "Effervescent blanc",
+    "Effervescent rosé",
+    "Effervescent rouge"
+  ];
+
+  function fileSize(n){
+    if(!n && n !== 0) return "";
+    const units = ["o","Ko","Mo","Go"];
+    let i = 0, v = n;
+    while(v >= 1024 && i < units.length - 1){ v /= 1024; i++; }
+    return (i === 0 ? v : v.toFixed(v < 10 ? 1 : 0)) + " " + units[i];
+  }
+
+  function normalizeText(s){
+    return String(s || "")
+      .toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  }
+
+  function isCuveeCard(el){
+    return !!(el && el.closest && el.closest('[data-repeater="cuvees"], .row-card'));
+  }
+
+  function updateColorSelects(){
+    document.querySelectorAll('select').forEach(select=>{
+      const name = normalizeText(select.name);
+      const label = normalizeText((select.closest('.field') || {}).innerText || "");
+      const looksColor = name.includes("couleur") || label.includes("couleur");
+      const inCuvee = !!select.closest('[data-repeater="cuvees"], .row-card');
+
+      if(!looksColor || !inCuvee || select.dataset.colorV20 === "1") return;
+
+      const current = select.value;
+      select.innerHTML = '<option value="">Sélectionner</option>' + COLOR_OPTIONS.map(v=>`<option value="${v}">${v}</option>`).join("");
+      if(COLOR_OPTIONS.includes(current)) select.value = current;
+      select.dataset.colorV20 = "1";
+    });
+  }
+
+  function replaceVintageInputs(){
+    document.querySelectorAll('input, select').forEach(el=>{
+      const name = normalizeText(el.name);
+      const label = normalizeText((el.closest('.field') || {}).innerText || "");
+      const looksVintage = name.includes("millesime") || name.includes("millésime") || label.includes("millesime") || label.includes("millesime");
+      const inCuvee = !!el.closest('[data-repeater="cuvees"], .row-card');
+
+      if(!looksVintage || !inCuvee || el.dataset.vintageV20 === "1") return;
+
+      const value = el.value || "";
+      const select = document.createElement("select");
+      select.name = el.name || "millesime";
+      select.dataset.vintageV20 = "1";
+      select.innerHTML = '<option value="">Sélectionner</option>' +
+        Array.from({length:2026 - 1950 + 1}, (_,i)=>2026 - i)
+          .map(y=>`<option value="${y}">${y}</option>`)
+          .join("");
+
+      if(value && Number(value) >= 1950 && Number(value) <= 2026){
+        select.value = String(Number(value));
+      }
+
+      el.replaceWith(select);
+    });
+  }
+
+  function enhancePhotoPreviews(){
+    document.querySelectorAll('input[type="file"]').forEach(input=>{
+      if(input.dataset.v20Preview === "1") return;
+      input.dataset.v20Preview = "1";
+
+      input.addEventListener("change", function(){
+        const files = Array.from(input.files || []);
+        const imageFiles = files.filter(f => f.type && f.type.startsWith("image/"));
+        if(!imageFiles.length) return;
+
+        const field = input.closest(".field") || input.closest(".row-card") || document;
+        let list = field.querySelector(".files");
+
+        if(!list && input.name){
+          list = document.querySelector('.files[data-list="'+input.name+'"]');
+        }
+
+        if(!list){
+          list = document.createElement("ul");
+          list.className = "files";
+          const drop = input.closest(".drop");
+          if(drop && drop.parentNode) drop.parentNode.insertBefore(list, drop.nextSibling);
+        }
+
+        list.innerHTML = "";
+
+        imageFiles.forEach(file=>{
+          const li = document.createElement("li");
+          li.className = "file-with-thumb";
+
+          const img = document.createElement("img");
+          img.className = "thumb";
+          img.alt = "";
+          img.src = URL.createObjectURL(file);
+          img.onload = () => URL.revokeObjectURL(img.src);
+
+          const name = document.createElement("span");
+          name.className = "fn";
+          name.textContent = file.name;
+
+          const size = document.createElement("span");
+          size.className = "fs";
+          size.textContent = fileSize(file.size);
+
+          li.appendChild(img);
+          li.appendChild(name);
+          li.appendChild(size);
+          list.appendChild(li);
+        });
+      });
+    });
+  }
+
+  function enforceNoHorizontalScroll(){
+    document.documentElement.style.overflowX = "hidden";
+    document.body.style.overflowX = "hidden";
+    document.body.style.maxWidth = "100%";
+  }
+
+  function applyV20(){
+    updateColorSelects();
+    replaceVintageInputs();
+    enhancePhotoPreviews();
+    enforceNoHorizontalScroll();
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    applyV20();
+
+    const observer = new MutationObserver(applyV20);
+    observer.observe(document.body, {childList:true, subtree:true});
+  });
+
+  window.addEventListener("resize", enforceNoHorizontalScroll);
 })();
 </script>
 

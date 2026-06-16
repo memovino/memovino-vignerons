@@ -2753,6 +2753,196 @@ body.form-started .wrap{
 }
 
 </style>
+<style>
+
+/* ---------- V23 : OPTIMISATION CHARGEMENT / STABILITÉ ---------- */
+html,body{
+  width:100% !important;
+  max-width:100% !important;
+  overflow-x:hidden !important;
+}
+*,
+*::before,
+*::after{
+  box-sizing:border-box !important;
+}
+img,svg,video,canvas{
+  max-width:100% !important;
+  height:auto;
+}
+body:not(.form-started) .wrap,
+body:not(.form-started) .pagefoot,
+body:not(.form-started) .sticky-brand,
+body:not(.form-started) .step-progress{
+  display:none !important;
+}
+body.form-started .hero{
+  display:none !important;
+}
+body.form-started .sticky-brand{
+  display:block !important;
+  position:fixed !important;
+  top:0 !important;
+  left:0 !important;
+  right:0 !important;
+  height:58px !important;
+  z-index:100 !important;
+  opacity:1 !important;
+  transform:none !important;
+}
+body.form-started .sticky-brand-inner{
+  height:58px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:16px !important;
+  padding:0 12px !important;
+  overflow:hidden !important;
+}
+body.form-started .sticky-brand-title{
+  display:none !important;
+}
+body.form-started .sticky-brand .memovino{
+  width:78px !important;
+  max-width:34vw !important;
+  max-height:38px !important;
+}
+body.form-started .sticky-brand .vignerons{
+  width:84px !important;
+  max-width:34vw !important;
+  max-height:38px !important;
+}
+body.form-started .sticky-brand .sep{
+  height:28px !important;
+  flex:0 0 1px !important;
+}
+body.form-started .step-progress{
+  display:block !important;
+  position:fixed !important;
+  top:58px !important;
+  left:0 !important;
+  right:0 !important;
+  z-index:99 !important;
+  height:54px !important;
+  margin:0 !important;
+  padding:8px 16px !important;
+  background:rgba(252,251,246,.99) !important;
+  border-bottom:1px solid var(--sand) !important;
+  overflow:hidden !important;
+}
+body.form-started .step-progress-line{
+  height:3px !important;
+  margin:0 auto !important;
+  max-width:var(--maxw) !important;
+}
+body.form-started .step-progress-label{
+  margin:10px 0 0 !important;
+  text-align:left !important;
+  font-size:11px !important;
+  line-height:1.22 !important;
+  font-weight:700 !important;
+  color:var(--forest-soft) !important;
+}
+body.form-started .wrap{
+  display:block !important;
+  padding-top:122px !important;
+  padding-bottom:calc(150px + env(safe-area-inset-bottom)) !important;
+  padding-left:12px !important;
+  padding-right:12px !important;
+}
+body.form-started .sheet{
+  margin-top:0 !important;
+  padding-top:18px !important;
+  padding-left:14px !important;
+  padding-right:14px !important;
+  overflow:hidden !important;
+}
+body.form-started .form-step,
+body.form-started .form-step.active,
+body.form-started .form-step .section{
+  padding-top:0 !important;
+  margin-top:0 !important;
+}
+body.form-started .wizard-actions{
+  position:fixed !important;
+  left:0 !important;
+  right:0 !important;
+  bottom:0 !important;
+  z-index:120 !important;
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:9px !important;
+  margin:0 !important;
+  padding:10px 12px calc(10px + env(safe-area-inset-bottom)) !important;
+  background:rgba(252,251,246,.98) !important;
+  border-top:1px solid var(--sand) !important;
+  box-shadow:0 -18px 36px -28px rgba(30,38,31,.55) !important;
+}
+body.form-started .clear-form-btn{
+  grid-column:1 / -1 !important;
+  order:3 !important;
+  width:100% !important;
+  min-height:44px !important;
+}
+body.form-started .nav-btn.back{
+  grid-column:1 !important;
+  order:1 !important;
+}
+body.form-started .nav-btn.next{
+  grid-column:2 !important;
+  order:2 !important;
+}
+.files li,
+.file-with-thumb{
+  display:flex !important;
+  align-items:center !important;
+  gap:9px !important;
+  min-width:0 !important;
+}
+.files .thumb,
+.file-with-thumb .thumb{
+  width:34px !important;
+  height:34px !important;
+  min-width:34px !important;
+  max-width:34px !important;
+  object-fit:cover !important;
+  border-radius:8px !important;
+  border:1px solid var(--sand) !important;
+  background:var(--field) !important;
+}
+.files .fn{
+  min-width:0 !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+.validation-message{
+  display:none;
+  margin:12px 0 0;
+  padding:10px 12px;
+  border-radius:10px;
+  background:#F6EAE7;
+  border:1px solid rgba(155,59,46,.25);
+  color:var(--oxblood);
+  font-size:13px;
+  font-weight:700;
+}
+.validation-message.show{display:block;}
+@media (min-width:561px){
+  body.form-started .sticky-brand{height:64px !important;}
+  body.form-started .sticky-brand-inner{height:64px !important;}
+  body.form-started .step-progress{top:64px !important;height:58px !important;padding:10px 18px 11px !important;}
+  body.form-started .wrap{padding-top:132px !important;padding-bottom:132px !important;}
+  body.form-started .wizard-actions{
+    grid-template-columns:auto 1fr 1fr !important;
+    padding:12px 18px !important;
+  }
+  body.form-started .clear-form-btn{grid-column:1 !important;order:0 !important;}
+  body.form-started .nav-btn.back{grid-column:2 !important;order:0 !important;}
+  body.form-started .nav-btn.next{grid-column:3 !important;order:0 !important;}
+}
+
+</style>
 </head>
 <body>
 
@@ -3680,32 +3870,6 @@ $('#form').addEventListener('submit', async e=>{
 
 
 <script>
-/* V9 : gestion sticky avec seuil fixe pour éviter le ping-pong mobile */
-(function(){
-  function stableSticky(){
-    const on = window.scrollY > 8;
-    document.body.classList.toggle('has-scrolled', on);
-    document.body.classList.toggle('show-sticky-brand', on);
-  }
-
-  let ticking = false;
-  function onScroll(){
-    if(ticking) return;
-    ticking = true;
-    requestAnimationFrame(function(){
-      stableSticky();
-      ticking = false;
-    });
-  }
-
-  window.addEventListener('scroll', onScroll, {passive:true});
-  window.addEventListener('resize', stableSticky);
-  document.addEventListener('DOMContentLoaded', stableSticky);
-})();
-</script>
-
-
-<script>
 /* V11 : scroll propre des étapes sans passer sous le sticky */
 (function(){
   function safeScrollToForm(){
@@ -3726,761 +3890,238 @@ $('#form').addEventListener('submit', async e=>{
 </script>
 
 
-<script>
-/* V12 : libellé étape sous forme "Étape X/6 • Titre" */
-(function(){
-  const titles = [
-    "Informations du domaine",
-    "Coordonnées",
-    "Présentation",
-    "Cuvées",
-    "Documents",
-    "Cavistes"
-  ];
-
-  function updateStepLabel(){
-    const steps = Array.from(document.querySelectorAll('.form-step'));
-    const label = document.querySelector('[data-step-label]');
-    if(!steps.length || !label) return;
-
-    let activeIndex = steps.findIndex(s => s.classList.contains('active'));
-    if(activeIndex < 0) activeIndex = 0;
-
-    const title = steps[activeIndex].dataset.stepTitle || titles[activeIndex] || `Étape ${activeIndex + 1}`;
-    label.textContent = `Étape ${activeIndex + 1}/${steps.length} • ${title}`;
-  }
-
-  document.addEventListener('DOMContentLoaded', function(){
-    updateStepLabel();
-
-    const observer = new MutationObserver(updateStepLabel);
-    document.querySelectorAll('.form-step').forEach(step=>{
-      observer.observe(step, {attributes:true, attributeFilter:['class']});
-    });
-
-    document.addEventListener('click', function(e){
-      if(e.target.closest('[data-next]') || e.target.closest('[data-prev]')){
-        setTimeout(updateStepLabel, 80);
-      }
-    }, true);
-  });
-})();
-</script>
-
 
 <script>
-/* V13 : scroll mobile sous sticky complet */
 (function(){
-  function scrollFormBelowSticky(){
-    const sheet = document.querySelector('.sheet');
-    if(!sheet) return;
+  const STORAGE_KEY = 'memovino_vignerons_form_autosave_v23';
+  const COLOR_OPTIONS = ["Rouge","Blanc","Rosé","Effervescent blanc","Effervescent rosé","Effervescent rouge"];
+  let currentStep = 0;
 
-    const isMobile = window.matchMedia('(max-width:560px)').matches;
-    const stickyVisible = document.body.classList.contains('show-sticky-brand');
-    const offset = stickyVisible ? (isMobile ? 134 : 126) : 18;
+  const $ = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+  const norm = s => String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 
-    const y = sheet.getBoundingClientRect().top + window.pageYOffset - offset;
-    window.scrollTo({top:Math.max(0,y), behavior:'smooth'});
+  function steps(){ return $$('.form-step'); }
+
+  function stepTitle(i){
+    const s = steps()[i];
+    return s ? (s.dataset.stepTitle || `Étape ${i+1}`) : '';
   }
 
-  document.addEventListener('click', function(e){
-    if(e.target.closest('[data-next]') || e.target.closest('[data-prev]')){
-      setTimeout(scrollFormBelowSticky, 120);
-    }
-  }, true);
-})();
-</script>
-
-
-<script>
-/* V15 : démarrage volontaire du formulaire */
-(function(){
-  function startForm(){
-    document.body.classList.add('form-started');
-    document.body.classList.add('show-sticky-brand');
-
-    const sheet = document.querySelector('.sheet');
-    if(sheet){
-      setTimeout(function(){
-        const y = sheet.getBoundingClientRect().top + window.pageYOffset - 132;
-        window.scrollTo({top:Math.max(0,y), behavior:'smooth'});
-      }, 80);
-    }
+  function updateProgress(){
+    const all = steps();
+    const line = $('[data-step-line]');
+    const label = $('[data-step-label]');
+    if(!all.length) return;
+    if(line) line.style.width = ((currentStep + 1) / all.length * 100) + '%';
+    if(label) label.textContent = `Étape ${currentStep + 1}/${all.length} • ${stepTitle(currentStep)}`;
+    const prev = $('[data-prev]');
+    const next = $('[data-next]');
+    if(prev) prev.disabled = currentStep === 0;
+    if(next) next.textContent = currentStep === all.length - 1 ? 'Validation' : 'Suivant';
+    document.body.classList.toggle('on-final-step', currentStep === all.length - 1);
   }
 
-  document.addEventListener('DOMContentLoaded', function(){
-    const btn = document.querySelector('[data-start-form]');
-    if(btn) btn.addEventListener('click', startForm);
-  });
-})();
-</script>
-
-
-<script>
-/* V16 : clic Commencer = bascule complète vers l'écran formulaire */
-(function(){
-  function startFormV16(){
-    document.body.classList.add('form-started');
-    document.body.classList.add('show-sticky-brand');
-    document.body.classList.add('has-scrolled');
-
-    setTimeout(function(){
-      window.scrollTo({top:0, behavior:'smooth'});
-    }, 60);
-  }
-
-  document.addEventListener('DOMContentLoaded', function(){
-    const btn = document.querySelector('[data-start-form]');
-    if(btn){
-      btn.addEventListener('click', function(e){
-        e.preventDefault();
-        startFormV16();
-      }, true);
-    }
-  });
-})();
-</script>
-
-
-<script>
-/* V17 : après Commencer, toujours démarrer à l'étape 1 */
-(function(){
-  function forceStepOne(){
-    const steps = Array.from(document.querySelectorAll('.form-step'));
-    if(!steps.length) return;
-
-    steps.forEach((step, index)=>{
-      step.classList.toggle('active', index === 0);
-    });
-
-    const line = document.querySelector('[data-step-line]');
-    const label = document.querySelector('[data-step-label]');
-    if(line) line.style.width = (100 / steps.length) + '%';
-    if(label) label.textContent = 'Étape 1/' + steps.length + ' • ' + (steps[0].dataset.stepTitle || 'Informations du domaine');
-
-    const prev = document.querySelector('[data-prev]');
-    const next = document.querySelector('[data-next]');
-    if(prev) prev.disabled = true;
-    if(next){
-      next.style.display = '';
-      next.textContent = 'Suivant';
-    }
-
-    document.body.classList.remove('on-final-step');
-  }
-
-  function startFormAtStepOne(){
-    document.body.classList.add('form-started');
-    document.body.classList.add('show-sticky-brand');
-    document.body.classList.add('has-scrolled');
-
-    forceStepOne();
-
-    setTimeout(function(){
-      window.scrollTo({top:0, behavior:'smooth'});
-      forceStepOne();
-    }, 80);
-  }
-
-  document.addEventListener('DOMContentLoaded', function(){
-    const btn = document.querySelector('[data-start-form]');
-    if(btn){
-      btn.addEventListener('click', function(e){
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        startFormAtStepOne();
-      }, true);
-    }
-  });
-})();
-</script>
-
-
-<script>
-/* V19 : scroll et étapes stabilisés, sans recalcul d'espace au scroll */
-(function(){
-  function getSteps(){
-    return Array.from(document.querySelectorAll('.form-step'));
-  }
-
-  function updateProgressLabel(){
-    const steps = getSteps();
-    const label = document.querySelector('[data-step-label]');
-    const line = document.querySelector('[data-step-line]');
-    if(!steps.length) return;
-
-    let activeIndex = steps.findIndex(s => s.classList.contains('active'));
-    if(activeIndex < 0) activeIndex = 0;
-
-    if(line){
-      line.style.width = ((activeIndex + 1) / steps.length * 100) + '%';
-    }
-
-    if(label){
-      const title = steps[activeIndex].dataset.stepTitle || 'Informations du domaine';
-      label.textContent = 'Étape ' + (activeIndex + 1) + '/' + steps.length + ' • ' + title;
-    }
-  }
-
-  function scrollTopStable(){
+  function showStep(i){
+    const all = steps();
+    if(!all.length) return;
+    currentStep = Math.max(0, Math.min(i, all.length-1));
+    all.forEach((s,idx)=>s.classList.toggle('active', idx === currentStep));
+    updateProgress();
     window.scrollTo({top:0, behavior:'smooth'});
+    save();
   }
 
-  function forceNoExtraTopSpace(){
-    if(!document.body.classList.contains('form-started')) return;
-    document.body.classList.add('show-sticky-brand');
-    document.body.classList.add('has-scrolled');
-
-    const sheet = document.querySelector('.sheet');
-    if(sheet){
-      sheet.style.marginTop = '0';
-    }
-
-    document.querySelectorAll('.form-step, .form-step.active, .form-step .section').forEach(el=>{
-      el.style.paddingTop = '0';
-      el.style.marginTop = '0';
+  function serialize(){
+    const form = $('#form');
+    const data = {};
+    if(!form) return data;
+    $$('input,textarea,select', form).forEach(el=>{
+      if(el.type === 'file') return;
+      const key = el.name || el.id;
+      if(!key) return;
+      data[key] = el.type === 'checkbox' ? el.checked : el.value;
     });
+    data.__step = currentStep;
+    return data;
   }
 
-  function startFormStable(){
-    document.body.classList.add('form-started');
-    document.body.classList.add('show-sticky-brand');
-    document.body.classList.add('has-scrolled');
-
-    const steps = getSteps();
-    steps.forEach((step,index)=>step.classList.toggle('active', index === 0));
-
-    const prev = document.querySelector('[data-prev]');
-    const next = document.querySelector('[data-next]');
-    if(prev) prev.disabled = true;
-    if(next){
-      next.style.display = '';
-      next.textContent = 'Suivant';
-    }
-
-    document.body.classList.remove('on-final-step');
-
-    updateProgressLabel();
-    forceNoExtraTopSpace();
-
-    setTimeout(function(){
-      window.scrollTo({top:0, behavior:'smooth'});
-      forceNoExtraTopSpace();
-      updateProgressLabel();
-    }, 60);
+  function save(){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(serialize())); }catch(e){}
   }
 
-  document.addEventListener('DOMContentLoaded', function(){
-    const btn = document.querySelector('[data-start-form]');
-    if(btn){
-      btn.addEventListener('click', function(e){
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        startFormStable();
-      }, true);
-    }
-
-    document.addEventListener('click', function(e){
-      if(e.target.closest('[data-next]') || e.target.closest('[data-prev]')){
-        setTimeout(function(){
-          forceNoExtraTopSpace();
-          updateProgressLabel();
-          scrollTopStable();
-        }, 90);
-      }
-    }, true);
-
-    window.addEventListener('scroll', function(){
-      requestAnimationFrame(forceNoExtraTopSpace);
-    }, {passive:true});
-
-    const observer = new MutationObserver(function(){
-      forceNoExtraTopSpace();
-      updateProgressLabel();
-    });
-
-    document.querySelectorAll('.form-step').forEach(step=>{
-      observer.observe(step, {attributes:true, attributeFilter:['class']});
-    });
-  });
-})();
-</script>
-
-
-<script>
-/* V20 : couleurs cuvées, millésime 1950-2026, miniatures photos, responsive stable */
-(function(){
-  const COLOR_OPTIONS = [
-    "Rouge",
-    "Blanc",
-    "Rosé",
-    "Effervescent blanc",
-    "Effervescent rosé",
-    "Effervescent rouge"
-  ];
-
-  function fileSize(n){
-    if(!n && n !== 0) return "";
-    const units = ["o","Ko","Mo","Go"];
-    let i = 0, v = n;
-    while(v >= 1024 && i < units.length - 1){ v /= 1024; i++; }
-    return (i === 0 ? v : v.toFixed(v < 10 ? 1 : 0)) + " " + units[i];
-  }
-
-  function normalizeText(s){
-    return String(s || "")
-      .toLowerCase()
-      .normalize("NFD").replace(/[\u0300-\u036f]/g,"");
-  }
-
-  function isCuveeCard(el){
-    return !!(el && el.closest && el.closest('[data-repeater="cuvees"], .row-card'));
-  }
-
-  function updateColorSelects(){
-    document.querySelectorAll('select').forEach(select=>{
-      const name = normalizeText(select.name);
-      const label = normalizeText((select.closest('.field') || {}).innerText || "");
-      const looksColor = name.includes("couleur") || label.includes("couleur");
-      const inCuvee = !!select.closest('[data-repeater="cuvees"], .row-card');
-
-      if(!looksColor || !inCuvee || select.dataset.colorV20 === "1") return;
-
-      const current = select.value;
-      select.innerHTML = '<option value="">Sélectionner</option>' + COLOR_OPTIONS.map(v=>`<option value="${v}">${v}</option>`).join("");
-      if(COLOR_OPTIONS.includes(current)) select.value = current;
-      select.dataset.colorV20 = "1";
-    });
-  }
-
-  function replaceVintageInputs(){
-    document.querySelectorAll('input, select').forEach(el=>{
-      const name = normalizeText(el.name);
-      const label = normalizeText((el.closest('.field') || {}).innerText || "");
-      const looksVintage = name.includes("millesime") || name.includes("millésime") || label.includes("millesime") || label.includes("millesime");
-      const inCuvee = !!el.closest('[data-repeater="cuvees"], .row-card');
-
-      if(!looksVintage || !inCuvee || el.dataset.vintageV20 === "1") return;
-
-      const value = el.value || "";
-      const select = document.createElement("select");
-      select.name = el.name || "millesime";
-      select.dataset.vintageV20 = "1";
-      select.innerHTML = '<option value="">Sélectionner</option>' +
-        Array.from({length:2026 - 1950 + 1}, (_,i)=>2026 - i)
-          .map(y=>`<option value="${y}">${y}</option>`)
-          .join("");
-
-      if(value && Number(value) >= 1950 && Number(value) <= 2026){
-        select.value = String(Number(value));
-      }
-
-      el.replaceWith(select);
-    });
-  }
-
-  function enhancePhotoPreviews(){
-    document.querySelectorAll('input[type="file"]').forEach(input=>{
-      if(input.dataset.v20Preview === "1") return;
-      input.dataset.v20Preview = "1";
-
-      input.addEventListener("change", function(){
-        const files = Array.from(input.files || []);
-        const imageFiles = files.filter(f => f.type && f.type.startsWith("image/"));
-        if(!imageFiles.length) return;
-
-        const field = input.closest(".field") || input.closest(".row-card") || document;
-        let list = field.querySelector(".files");
-
-        if(!list && input.name){
-          list = document.querySelector('.files[data-list="'+input.name+'"]');
-        }
-
-        if(!list){
-          list = document.createElement("ul");
-          list.className = "files";
-          const drop = input.closest(".drop");
-          if(drop && drop.parentNode) drop.parentNode.insertBefore(list, drop.nextSibling);
-        }
-
-        list.innerHTML = "";
-
-        imageFiles.forEach(file=>{
-          const li = document.createElement("li");
-          li.className = "file-with-thumb";
-
-          const img = document.createElement("img");
-          img.className = "thumb";
-          img.alt = "";
-          img.src = URL.createObjectURL(file);
-          img.onload = () => URL.revokeObjectURL(img.src);
-
-          const name = document.createElement("span");
-          name.className = "fn";
-          name.textContent = file.name;
-
-          const size = document.createElement("span");
-          size.className = "fs";
-          size.textContent = fileSize(file.size);
-
-          li.appendChild(img);
-          li.appendChild(name);
-          li.appendChild(size);
-          list.appendChild(li);
-        });
+  function restore(){
+    try{
+      const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      const form = $('#form');
+      if(!form) return;
+      $$('input,textarea,select', form).forEach(el=>{
+        if(el.type === 'file') return;
+        const key = el.name || el.id;
+        if(!(key in data)) return;
+        if(el.type === 'checkbox') el.checked = !!data[key];
+        else el.value = data[key];
       });
-    });
+    }catch(e){}
   }
 
-  function enforceNoHorizontalScroll(){
-    document.documentElement.style.overflowX = "hidden";
-    document.body.style.overflowX = "hidden";
-    document.body.style.maxWidth = "100%";
-  }
-
-  function applyV20(){
-    updateColorSelects();
-    replaceVintageInputs();
-    enhancePhotoPreviews();
-    enforceNoHorizontalScroll();
-  }
-
-  document.addEventListener("DOMContentLoaded", function(){
-    applyV20();
-
-    const observer = new MutationObserver(applyV20);
-    observer.observe(document.body, {childList:true, subtree:true});
-  });
-
-  window.addEventListener("resize", enforceNoHorizontalScroll);
-})();
-</script>
-
-
-<script>
-/* V21 : adresse obligatoire + au moins une cuvée complète + boutons fixes */
-(function(){
-  function norm(s){
-    return String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
-  }
-
-  function markRequiredField(input){
+  function markRequired(input){
     if(!input) return;
-    const field = input.closest(".field");
+    const field = input.closest('.field');
     if(!field) return;
-    field.setAttribute("data-required","true");
-    const label = field.querySelector("label");
-    if(label && !label.querySelector(".req") && !label.querySelector(".req-auto")){
-      const span = document.createElement("span");
-      span.className = "req-auto";
-      span.textContent = " *";
-      label.appendChild(span);
+    field.setAttribute('data-required','true');
+    const label = field.querySelector('label');
+    if(label && !label.querySelector('.req') && !label.querySelector('.req-auto')){
+      const s = document.createElement('span');
+      s.className='req-auto'; s.textContent=' *';
+      label.appendChild(s);
     }
   }
 
-  function setupAddressRequired(){
-    const selectors = [
-      'input[name="adresse"]',
-      'input[name="code_postal"]',
-      'input[name="ville"]'
-    ];
-    selectors.forEach(sel => markRequiredField(document.querySelector(sel)));
-  }
-
-  function getCuveeCards(){
-    const container = document.querySelector('[data-repeater="cuvees"]');
-    if(!container) return [];
-    return Array.from(container.querySelectorAll(".row-card"));
-  }
-
-  function findInputInCard(card, keys){
-    const fields = Array.from(card.querySelectorAll("input, textarea, select"));
-    return fields.find(el=>{
+  function findInCard(card, keys){
+    return $$('input,textarea,select', card).find(el=>{
       const n = norm(el.name);
-      const txt = norm((el.closest(".field") || {}).innerText || "");
-      return keys.some(k => n.includes(k) || txt.includes(k));
+      const t = norm((el.closest('.field')||{}).innerText || '');
+      return keys.some(k=>n.includes(k) || t.includes(k));
     });
   }
 
-  function setupCuveeRequiredLabels(){
-    getCuveeCards().forEach(card=>{
-      const nom = findInputInCard(card, ["nom"]);
-      const cepages = findInputInCard(card, ["cepage", "cepages"]);
-      const couleur = findInputInCard(card, ["couleur"]);
-      const millesime = findInputInCard(card, ["millesime", "millesime"]);
-      [nom, cepages, couleur, millesime].forEach(markRequiredField);
+  function setupCuvees(){
+    const cards = $$('#form [data-repeater="cuvees"] .row-card');
+    cards.forEach(card=>{
+      const color = findInCard(card, ['couleur']);
+      if(color && color.tagName === 'SELECT' && color.dataset.v23Color !== '1'){
+        const old = color.value;
+        color.innerHTML = '<option value="">Sélectionner</option>' + COLOR_OPTIONS.map(v=>`<option value="${v}">${v}</option>`).join('');
+        if(COLOR_OPTIONS.includes(old)) color.value = old;
+        color.dataset.v23Color = '1';
+      }
+
+      const vintage = findInCard(card, ['millesime','millésime']);
+      if(vintage && vintage.tagName !== 'SELECT'){
+        const old = vintage.value;
+        const sel = document.createElement('select');
+        sel.name = vintage.name || 'millesime';
+        sel.innerHTML = '<option value="">Sélectionner</option>' + Array.from({length:77},(_,i)=>2026-i).map(y=>`<option value="${y}">${y}</option>`).join('');
+        if(old && Number(old)>=1950 && Number(old)<=2026) sel.value = String(Number(old));
+        vintage.replaceWith(sel);
+      }
+
+      markRequired(findInCard(card, ['nom']));
+      markRequired(findInCard(card, ['couleur']));
+      markRequired(findInCard(card, ['cepage','cepages']));
+
+      const mill = findInCard(card, ['millesime','millésime']);
+      if(mill){
+        const f = mill.closest('.field');
+        if(f){ f.removeAttribute('data-required'); f.classList.remove('invalid'); }
+      }
     });
   }
 
-  function getOrCreateValidationMessage(step){
-    let msg = step.querySelector(".validation-message");
-    if(!msg){
-      msg = document.createElement("div");
-      msg.className = "validation-message";
-      const actions = document.querySelector(".wizard-actions");
-      step.appendChild(msg);
-    }
-    return msg;
+  function setupAddress(){
+    ['adresse','code_postal','ville'].forEach(n=>markRequired($(`[name="${n}"]`)));
   }
 
-  function clearValidationMessages(){
-    document.querySelectorAll(".validation-message").forEach(m=>{
-      m.classList.remove("show");
-      m.textContent = "";
-    });
-  }
-
-  function validateAddressStep(step){
-    const activeText = norm(step.innerText);
-    if(!activeText.includes("coordonnees") && !activeText.includes("adresse")) return true;
-
-    const required = [
-      document.querySelector('input[name="adresse"]'),
-      document.querySelector('input[name="code_postal"]'),
-      document.querySelector('input[name="ville"]')
-    ].filter(Boolean);
-
-    let ok = true;
-    required.forEach(input=>{
-      const field = input.closest(".field");
-      const empty = !String(input.value || "").trim();
-      if(field) field.classList.toggle("invalid", empty);
-      if(empty) ok = false;
-    });
-
-    if(!ok){
-      const msg = getOrCreateValidationMessage(step);
-      msg.textContent = "Merci de compléter l’adresse, le code postal et la ville avant de continuer.";
-      msg.classList.add("show");
-    }
-
-    return ok;
-  }
-
-  function validateCuveeStep(step){
-    const activeText = norm(step.innerText);
-    if(!activeText.includes("cuvee")) return true;
-
-    setupCuveeRequiredLabels();
-
-    const cards = getCuveeCards();
-    if(!cards.length){
-      const msg = getOrCreateValidationMessage(step);
-      msg.textContent = "Merci d’ajouter au moins une cuvée avant de continuer.";
-      msg.classList.add("show");
-      return false;
-    }
-
-    let firstCard = cards[0];
-    const nom = findInputInCard(firstCard, ["nom"]);
-    const cepages = findInputInCard(firstCard, ["cepage", "cepages"]);
-    const couleur = findInputInCard(firstCard, ["couleur"]);
-    const millesime = findInputInCard(firstCard, ["millesime", "millesime"]);
-
-    const required = [nom, cepages, couleur, millesime].filter(Boolean);
-    let ok = true;
-
-    required.forEach(input=>{
-      const field = input.closest(".field");
-      const empty = !String(input.value || "").trim();
-      if(field) field.classList.toggle("invalid", empty);
-      if(empty) ok = false;
-    });
-
-    if(!nom || !cepages || !couleur || !millesime){
-      ok = false;
-    }
-
-    if(!ok){
-      const msg = getOrCreateValidationMessage(step);
-      msg.textContent = "Merci de compléter au moins une cuvée avec son nom, sa couleur, son millésime et ses cépages.";
-      msg.classList.add("show");
-    }
-
-    return ok;
-  }
-
-  function validateActiveStepV21(){
-    clearValidationMessages();
-
-    const step = document.querySelector(".form-step.active");
+  function validateStep(){
+    const step = $('.form-step.active');
     if(!step) return true;
-
-    setupAddressRequired();
-    setupCuveeRequiredLabels();
-
+    $$('.validation-message', step).forEach(m=>m.remove());
     let ok = true;
 
-    // Validation générique des champs data-required visibles
-    step.querySelectorAll("[data-required], [data-required='true']").forEach(field=>{
-      const input = field.querySelector("input,select,textarea");
-      if(!input || input.type === "file") return;
-      const empty = !String(input.value || "").trim();
-      field.classList.toggle("invalid", empty);
+    $$('[data-required]', step).forEach(field=>{
+      const input = $('input,select,textarea', field);
+      if(!input || input.type === 'file') return;
+      const empty = !String(input.value||'').trim();
+      field.classList.toggle('invalid', empty);
       if(empty) ok = false;
     });
 
-    if(!validateAddressStep(step)) ok = false;
-    if(!validateCuveeStep(step)) ok = false;
-
-    return ok;
-  }
-
-  function keepActionsVisible(){
-    const actions = document.querySelector(".wizard-actions");
-    if(actions && document.body.classList.contains("form-started")){
-      actions.style.display = "grid";
-    }
-  }
-
-  document.addEventListener("DOMContentLoaded", function(){
-    setupAddressRequired();
-    setupCuveeRequiredLabels();
-    keepActionsVisible();
-
-    const obs = new MutationObserver(function(){
-      setupAddressRequired();
-      setupCuveeRequiredLabels();
-      keepActionsVisible();
-    });
-    obs.observe(document.body, {childList:true, subtree:true, attributes:true, attributeFilter:["class"]});
-
-    document.addEventListener("click", function(e){
-      const next = e.target.closest("[data-next]");
-      if(next){
-        if(!validateActiveStepV21()){
-          e.preventDefault();
-          e.stopImmediatePropagation();
-          const firstInvalid = document.querySelector(".form-step.active .field.invalid, .form-step.active .validation-message.show");
-          if(firstInvalid){
-            firstInvalid.scrollIntoView({behavior:"smooth", block:"center"});
-          }
-          return false;
-        }
+    if(norm(step.innerText).includes('cuvee')){
+      const card = $('#form [data-repeater="cuvees"] .row-card');
+      const required = card ? [
+        findInCard(card, ['nom']),
+        findInCard(card, ['couleur']),
+        findInCard(card, ['cepage','cepages'])
+      ] : [];
+      ok = required.length === 3 && required.every(input=>{
+        const empty = !String(input && input.value || '').trim();
+        if(input && input.closest('.field')) input.closest('.field').classList.toggle('invalid', empty);
+        return !empty;
+      }) && ok;
+      if(!ok){
+        const msg = document.createElement('div');
+        msg.className='validation-message show';
+        msg.textContent='Merci d’ajouter au moins une cuvée avec son nom, sa couleur et ses cépages.';
+        step.appendChild(msg);
       }
-    }, true);
-
-    document.addEventListener("input", function(e){
-      const field = e.target.closest && e.target.closest(".field.invalid");
-      if(field){
-        field.classList.remove("invalid");
-      }
-    }, true);
-  });
-})();
-</script>
-
-
-<script>
-/* V22 : millésime optionnel — cuvée obligatoire = nom + couleur + cépages */
-(function(){
-  function norm(s){
-    return String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
-  }
-
-  function getCuveeCards(){
-    const container = document.querySelector('[data-repeater="cuvees"]');
-    if(!container) return [];
-    return Array.from(container.querySelectorAll(".row-card"));
-  }
-
-  function findInputInCard(card, keys){
-    const fields = Array.from(card.querySelectorAll("input, textarea, select"));
-    return fields.find(el=>{
-      const n = norm(el.name);
-      const txt = norm((el.closest(".field") || {}).innerText || "");
-      return keys.some(k => n.includes(k) || txt.includes(k));
-    });
-  }
-
-  function removeRequiredFromVintage(){
-    getCuveeCards().forEach(card=>{
-      const millesime = findInputInCard(card, ["millesime", "millésime"]);
-      if(!millesime) return;
-      const field = millesime.closest(".field");
-      if(field){
-        field.removeAttribute("data-required");
-        field.removeAttribute("data-required-v21");
-        field.classList.remove("invalid");
-        const label = field.querySelector("label");
-        if(label){
-          label.querySelectorAll(".req-auto").forEach(el=>el.remove());
-          if(!label.querySelector(".hint")){
-            const hint = document.createElement("span");
-            hint.className = "hint";
-            hint.textContent = " (optionnel)";
-            label.appendChild(hint);
-          }
-        }
-      }
-    });
-  }
-
-  function validateCuveeWithoutVintage(){
-    const step = document.querySelector(".form-step.active");
-    if(!step || !norm(step.innerText).includes("cuvee")) return true;
-
-    const cards = getCuveeCards();
-    if(!cards.length) return false;
-
-    const card = cards[0];
-    const nom = findInputInCard(card, ["nom"]);
-    const couleur = findInputInCard(card, ["couleur"]);
-    const cepages = findInputInCard(card, ["cepage", "cepages"]);
-
-    const required = [nom, couleur, cepages].filter(Boolean);
-    let ok = required.length === 3;
-
-    required.forEach(input=>{
-      const field = input.closest(".field");
-      const empty = !String(input.value || "").trim();
-      if(field) field.classList.toggle("invalid", empty);
-      if(empty) ok = false;
-    });
-
-    let msg = step.querySelector(".validation-message");
-    if(!msg){
-      msg = document.createElement("div");
-      msg.className = "validation-message";
-      step.appendChild(msg);
-    }
-
-    if(!ok){
-      msg.textContent = "Merci d’ajouter au moins une cuvée avec son nom, sa couleur et ses cépages.";
-      msg.classList.add("show");
-    }else{
-      msg.classList.remove("show");
-      msg.textContent = "";
     }
 
     return ok;
   }
 
-  document.addEventListener("DOMContentLoaded", function(){
-    removeRequiredFromVintage();
+  function imagePreviews(input){
+    const files = Array.from(input.files||[]).filter(f=>f.type && f.type.startsWith('image/'));
+    if(!files.length) return;
+    const field = input.closest('.field') || input.closest('.row-card') || document;
+    let list = field.querySelector('.files') || document.querySelector(`.files[data-list="${input.name}"]`);
+    if(!list){
+      list = document.createElement('ul'); list.className='files';
+      input.closest('.drop')?.after(list);
+    }
+    list.innerHTML='';
+    files.forEach(file=>{
+      const li=document.createElement('li');
+      li.className='file-with-thumb';
+      const img=document.createElement('img');
+      img.className='thumb'; img.alt=''; img.src=URL.createObjectURL(file);
+      img.onload=()=>URL.revokeObjectURL(img.src);
+      const name=document.createElement('span'); name.className='fn'; name.textContent=file.name;
+      const size=document.createElement('span'); size.className='fs'; size.textContent='';
+      li.append(img,name,size); list.appendChild(li);
+    });
+  }
 
-    const obs = new MutationObserver(removeRequiredFromVintage);
+  function startForm(){
+    document.body.classList.add('form-started','show-sticky-brand','has-scrolled');
+    currentStep = 0;
+    showStep(0);
+  }
+
+  function clearForm(){
+    if(!confirm('Vous êtes sûr de vouloir supprimer votre formulaire et recommencer ?')) return;
+    try{
+      Object.keys(localStorage).forEach(k=>{
+        if(k.toLowerCase().includes('memovino') && k.toLowerCase().includes('vignerons')) localStorage.removeItem(k);
+      });
+    }catch(e){}
+    $('#form')?.reset();
+    $$('.files').forEach(l=>l.innerHTML='');
+    currentStep = 0;
+    showStep(0);
+  }
+
+  document.addEventListener('DOMContentLoaded', ()=>{
+    restore();
+    setupAddress(); setupCuvees(); updateProgress();
+
+    $('[data-start-form]')?.addEventListener('click', e=>{ e.preventDefault(); startForm(); });
+    $('[data-next]')?.addEventListener('click', e=>{
+      e.preventDefault();
+      setupAddress(); setupCuvees();
+      if(validateStep()) showStep(currentStep+1);
+    }, true);
+    $('[data-prev]')?.addEventListener('click', e=>{ e.preventDefault(); showStep(currentStep-1); }, true);
+    $('[data-clear-form]')?.addEventListener('click', e=>{ e.preventDefault(); clearForm(); }, true);
+
+    $('#form')?.addEventListener('input', save);
+    $('#form')?.addEventListener('change', e=>{
+      save();
+      if(e.target && e.target.type === 'file') imagePreviews(e.target);
+    });
+
+    const obs = new MutationObserver(()=>{ setupAddress(); setupCuvees(); });
     obs.observe(document.body, {childList:true, subtree:true});
-
-    document.addEventListener("click", function(e){
-      const next = e.target.closest("[data-next]");
-      if(!next) return;
-
-      const step = document.querySelector(".form-step.active");
-      if(!step || !norm(step.innerText).includes("cuvee")) return;
-
-      removeRequiredFromVintage();
-
-      if(!validateCuveeWithoutVintage()){
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        const firstInvalid = document.querySelector(".form-step.active .field.invalid, .form-step.active .validation-message.show");
-        if(firstInvalid){
-          firstInvalid.scrollIntoView({behavior:"smooth", block:"center"});
-        }
-        return false;
-      }
-    }, true);
   });
 })();
 </script>

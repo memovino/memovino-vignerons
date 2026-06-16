@@ -798,6 +798,63 @@ body.show-sticky-brand .step-progress{
 }
 
 </style>
+<style>
+
+/* ---------- V6 : LOGOS RÉDUITS DÈS LE SCROLL + FORMULAIRE EN FONDU ---------- */
+.hero{
+  transition:padding .28s ease;
+}
+.hero .crest{
+  transition:transform .28s ease, opacity .28s ease, margin .28s ease;
+  transform-origin:center top;
+}
+body.has-scrolled .hero{
+  padding-top:18px;
+  padding-bottom:42px;
+}
+body.has-scrolled .hero .crest{
+  transform:scale(.68) translateY(-4px) !important;
+  opacity:1 !important;
+  animation:none !important;
+}
+body.has-scrolled .hero .eyebrow,
+body.has-scrolled .hero h1,
+body.has-scrolled .hero .lede,
+body.has-scrolled .hero .value-line{
+  opacity:0;
+  max-height:0;
+  margin-top:0;
+  overflow:hidden;
+  transition:opacity .18s ease,max-height .18s ease,margin .18s ease;
+}
+.sheet{
+  opacity:0;
+  transform:translateY(24px);
+  animation:sheetFadeIn .58s cubic-bezier(.2,.75,.2,1) .12s forwards;
+}
+@keyframes sheetFadeIn{
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+body.has-scrolled .sheet{
+  margin-top:-58px;
+}
+@media (max-width:560px){
+  body.has-scrolled .hero{
+    padding-top:12px;
+    padding-bottom:34px;
+  }
+  body.has-scrolled .hero .crest{
+    transform:scale(.62) translateY(-2px) !important;
+  }
+  body.has-scrolled .sheet{
+    margin-top:-46px;
+  }
+}
+
+</style>
 </head>
 <body>
 
@@ -1574,6 +1631,18 @@ $('#form').addEventListener('submit', async e=>{
   window.addEventListener('scroll', updateStickyBrand, {passive:true});
   window.addEventListener('resize', updateStickyBrand);
   document.addEventListener('DOMContentLoaded', updateStickyBrand);
+})();
+</script>
+
+
+<script>
+(function(){
+  function updateStartScrollState(){
+    document.body.classList.toggle('has-scrolled', window.scrollY > 8);
+  }
+  window.addEventListener('scroll', updateStartScrollState, {passive:true});
+  window.addEventListener('resize', updateStartScrollState);
+  document.addEventListener('DOMContentLoaded', updateStartScrollState);
 })();
 </script>
 

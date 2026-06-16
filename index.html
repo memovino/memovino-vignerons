@@ -343,6 +343,261 @@ img[alt="MEMOVINO"],
   opacity: 1 !important;
 }
 </style>
+<style>
+
+/* ---------- PREMIUM ADDITIONS MEMOVINO ---------- */
+.value-line{
+  max-width:54ch;
+  margin:18px auto 0;
+  font-size:clamp(14px,2.2vw,16px);
+  color:#F4F1E8;
+  font-weight:600;
+  opacity:0;
+  animation:fade .9s .62s ease forwards;
+}
+.hero-trust{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+  margin:18px auto 0;
+  opacity:0;
+  animation:fade .9s .72s ease forwards;
+}
+.hero-trust span{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  border:1px solid rgba(244,241,232,.18);
+  background:rgba(244,241,232,.07);
+  color:rgba(244,241,232,.82);
+  border-radius:999px;
+  padding:7px 12px;
+  font-size:12px;
+  font-weight:600;
+}
+.progress-steps{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0;
+  border:1px solid var(--sand);
+  border-radius:999px;
+  overflow:hidden;
+  background:#fff;
+  margin:0 0 28px;
+}
+.progress-steps .step{
+  position:relative;
+  text-align:center;
+  padding:10px 8px;
+  font-size:12px;
+  font-weight:700;
+  color:var(--forest-soft);
+  border-left:1px solid var(--sand);
+}
+.progress-steps .step:first-child{border-left:0;}
+.progress-steps .step.active{
+  color:var(--parchment);
+  background:var(--forest);
+}
+.progress-steps .step.done{
+  color:var(--forest);
+  background:#EEF1EA;
+}
+.trust-card{
+  border:1px solid rgba(66,79,69,.18);
+  background:linear-gradient(180deg,#fff,#FBFAF3);
+  border-radius:var(--radius-sm);
+  padding:14px 16px;
+  margin:0 0 26px;
+  color:var(--forest-soft);
+  font-size:13px;
+}
+.trust-card strong{
+  display:block;
+  color:var(--ink);
+  font-size:14px;
+  margin-bottom:3px;
+}
+.files .thumb{
+  width:42px;
+  height:42px;
+  border-radius:8px;
+  object-fit:cover;
+  border:1px solid var(--sand);
+  background:var(--field);
+  flex:0 0 auto;
+}
+.result.ok{
+  padding:28px 8px;
+}
+.result.ok h2{
+  font-size:clamp(25px,4vw,32px);
+}
+.result.ok p{
+  max-width:52ch;
+}
+.result.ok .next-steps{
+  margin:22px auto 0;
+  max-width:520px;
+  text-align:left;
+  border:1px solid var(--sand);
+  background:var(--field);
+  border-radius:var(--radius-sm);
+  padding:16px 18px;
+}
+.result.ok .next-steps b{
+  display:block;
+  margin-bottom:8px;
+  color:var(--ink);
+}
+.result.ok .next-steps ul{
+  margin:0;
+  padding-left:18px;
+  color:var(--forest-soft);
+  font-size:13.5px;
+}
+.result.ok .next-steps li{
+  margin:5px 0;
+}
+@media (max-width:560px){
+  .progress-steps{
+    grid-template-columns:1fr 1fr;
+    border-radius:14px;
+  }
+  .progress-steps .step:nth-child(3){
+    border-left:0;
+    border-top:1px solid var(--sand);
+  }
+  .progress-steps .step:nth-child(4){
+    border-top:1px solid var(--sand);
+  }
+}
+
+</style>
+<style>
+
+/* ---------- WIZARD ÉTAPES + AUTOSAVE ---------- */
+.value-line{
+  margin-top:18px !important;
+  font-size:clamp(14px,2.2vw,16px);
+  font-weight:600;
+  color:rgba(244,241,232,.9);
+}
+.hero-trust,.trust-card{display:none !important;}
+
+.step-progress{
+  margin:0 0 26px;
+}
+.step-progress-line{
+  height:3px;
+  width:100%;
+  background:rgba(66,79,69,.12);
+  border-radius:999px;
+  overflow:hidden;
+}
+.step-progress-line span{
+  display:block;
+  height:100%;
+  width:16.666%;
+  background:var(--forest);
+  border-radius:999px;
+  transition:width .25s ease;
+}
+.step-progress-label{
+  margin-top:9px;
+  font-size:12px;
+  color:var(--forest-soft);
+  text-align:center;
+  font-weight:600;
+  letter-spacing:.03em;
+}
+.progress-steps{display:none !important;}
+
+.form-step{
+  display:none;
+}
+.form-step.active{
+  display:block;
+}
+.form-step .section{
+  border-top:0;
+  padding-top:clamp(8px,2vw,14px);
+}
+.wizard-actions{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:28px;
+  padding-top:24px;
+  border-top:1px solid var(--sand);
+}
+.nav-btn{
+  border:1.5px solid var(--forest);
+  border-radius:999px;
+  padding:12px 22px;
+  font-family:var(--ui);
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+  transition:background .15s ease,color .15s ease,opacity .15s ease;
+}
+.nav-btn.back{
+  background:transparent;
+  color:var(--forest);
+}
+.nav-btn.next{
+  margin-left:auto;
+  background:var(--forest);
+  color:var(--parchment);
+}
+.nav-btn:hover{
+  background:#384538;
+  color:var(--parchment);
+}
+.nav-btn[disabled]{
+  opacity:.35;
+  cursor:default;
+  pointer-events:none;
+}
+.final-submit{
+  display:none;
+}
+body.on-final-step .final-submit{
+  display:block;
+}
+body.on-final-step .wizard-actions{
+  display:flex;
+}
+body.on-final-step .nav-btn.next{
+  display:none;
+}
+.autosave-note{
+  text-align:center;
+  margin-top:12px;
+  font-size:12px;
+  color:var(--forest-soft);
+}
+.files .thumb{
+  width:42px;
+  height:42px;
+  border-radius:8px;
+  object-fit:cover;
+  border:1px solid var(--sand);
+  background:var(--field);
+  flex:0 0 auto;
+}
+@media (max-width:560px){
+  .wizard-actions{
+    flex-direction:row;
+  }
+  .nav-btn{
+    flex:1;
+    padding:12px 14px;
+  }
+}
+
+</style>
 </head>
 <body>
 
@@ -363,6 +618,7 @@ img[alt="MEMOVINO"],
     <p class="eyebrow">En partenariat avec l'Association des Vignerons de Wallonie</p>
     <h1>Rejoignez Memovino, <em>racontez votre vin</em></h1>
     <p class="lede">Quelques informations sur votre domaine, vos cuvées et vos partenaires suffisent pour faire entrer votre travail dans la communauté Memovino.</p>
+    <p class="value-line">Rejoignez la première application qui référencera 100&nbsp;% des vins wallons.</p>
   </header>
 
   <main class="wrap">
@@ -370,9 +626,15 @@ img[alt="MEMOVINO"],
 
       <!-- LIVE FORM -->
       <form id="form" class="form-live" novalidate>
+        <div class="step-progress" aria-label="Progression du dossier">
+          <div class="step-progress-line"><span data-step-line></span></div>
+          <div class="step-progress-label" data-step-label>Informations du domaine</div>
+        </div>
+
 
         <!-- 1. IDENTITÉ -->
-        <section class="section">
+        <div class="form-step active" data-step="0" data-step-title="Informations du domaine">
+<section class="section">
           <div class="sec-head">
             <span class="capsule" aria-hidden="true"></span>
             <div class="sec-titles">
@@ -397,9 +659,11 @@ img[alt="MEMOVINO"],
             </div>
           </div>
         </section>
+</div>
 
         <!-- 2. COORDONNÉES -->
-        <section class="section">
+        <div class="form-step" data-step="1" data-step-title="Coordonnées">
+<section class="section">
           <div class="sec-head">
             <span class="capsule" aria-hidden="true"></span>
             <div class="sec-titles">
@@ -448,9 +712,11 @@ img[alt="MEMOVINO"],
             </div>
           </div>
         </section>
+</div>
 
         <!-- 3. HISTOIRE + PHOTOS -->
-        <section class="section">
+        <div class="form-step" data-step="2" data-step-title="Présentation">
+<section class="section">
           <div class="sec-head">
             <span class="capsule" aria-hidden="true"></span>
             <div class="sec-titles">
@@ -478,9 +744,11 @@ img[alt="MEMOVINO"],
             </div>
           </div>
         </section>
+</div>
 
         <!-- 4. CUVÉES -->
-        <section class="section">
+        <div class="form-step" data-step="3" data-step-title="Cuvées">
+<section class="section">
           <div class="sec-head">
             <span class="capsule" aria-hidden="true"></span>
             <div class="sec-titles">
@@ -505,9 +773,11 @@ img[alt="MEMOVINO"],
             <ul class="files" data-list="liste"></ul>
           </div>
         </section>
+</div>
 
         <!-- 5. FICHE TECHNIQUE -->
-        <section class="section">
+        <div class="form-step" data-step="4" data-step-title="Documents">
+<section class="section">
           <div class="sec-head">
             <span class="capsule" aria-hidden="true"></span>
             <div class="sec-titles">
@@ -528,9 +798,11 @@ img[alt="MEMOVINO"],
             <ul class="files" data-list="fiches"></ul>
           </div>
         </section>
+</div>
 
         <!-- 6. CAVISTES -->
-        <section class="section">
+        <div class="form-step" data-step="5" data-step-title="Cavistes">
+<section class="section">
           <div class="sec-head">
             <span class="capsule" aria-hidden="true"></span>
             <div class="sec-titles">
@@ -541,15 +813,21 @@ img[alt="MEMOVINO"],
           <div class="rows" data-repeater="cavistes"></div>
           <button type="button" class="add-btn" data-add="cavistes"><span class="plus">+</span> Ajouter un caviste</button>
         </section>
+</div>
 
         <!-- ACTIONS -->
-        <div class="footer-actions">
+        <div class="wizard-actions">
+          <button type="button" class="nav-btn back" data-prev>Retour</button>
+          <button type="button" class="nav-btn next" data-next>Suivant</button>
+        </div>
+
+        <div class="footer-actions final-submit">
           <label class="consent">
             <input type="checkbox" id="consent" />
             <span>J'accepte que ces informations soient utilisées <strong>uniquement par Memovino</strong>, dans le cadre du partenariat avec l'Association des Vignerons de Wallonie. Elles ne sont <strong>transmises à aucun tiers</strong>.</span>
           </label>
           <button type="submit" class="submit"><span class="spin"></span><span class="lbl">Envoyer le dossier</span></button>
-          <p class="formnote">Vos fichiers sont transmis de manière sécurisée. Champs marqués <span style="color:var(--oxblood)">*</span> obligatoires.</p>
+          <p class="formnote">Vos informations sont sauvegardées automatiquement sur cet appareil. Champs marqués <span style="color:var(--oxblood)">*</span> obligatoires.</p>
         </div>
       </form>
 
@@ -558,8 +836,16 @@ img[alt="MEMOVINO"],
         <div class="seal" aria-hidden="true">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3E5B45" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
         </div>
-        <h2>Dossier bien reçu</h2>
-        <p>Merci. Votre dossier de partenariat a été transmis à l'équipe Memovino. Nous revenons vers vous très vite.</p>
+        <h2>Merci, votre dossier est bien arrivé.</h2>
+        <p>Votre domaine rejoint les partenaires en cours d’intégration sur MEMOVINO. Notre équipe va analyser vos informations, vos cuvées et vos documents afin de préparer une présentation fidèle à votre travail.</p>
+        <div class="next-steps">
+          <b>Prochaines étapes</b>
+          <ul>
+            <li>Vérification des informations transmises.</li>
+            <li>Préparation de vos cuvées et contenus dans l’univers MEMOVINO.</li>
+            <li>Prise de contact si une précision est nécessaire.</li>
+          </ul>
+        </div>
       </div>
 
       <!-- ERROR -->
@@ -883,5 +1169,198 @@ $('#form').addEventListener('submit', async e=>{
     toggleStickyBrand();
   })();
 </script>
+
+
+<script>
+(function(){
+  const STORAGE_KEY = 'memovino_vignerons_form_autosave_v3';
+  let currentStep = 0;
+
+  function steps(){
+    return Array.from(document.querySelectorAll('.form-step'));
+  }
+
+  function currentStepsCount(){
+    return steps().length || 1;
+  }
+
+  function stepTitle(index){
+    const s = steps()[index];
+    return s ? (s.dataset.stepTitle || ('Étape ' + (index + 1))) : '';
+  }
+
+  function showStep(index){
+    const all = steps();
+    if(!all.length) return;
+    currentStep = Math.max(0, Math.min(index, all.length - 1));
+    all.forEach((s,i)=>s.classList.toggle('active', i === currentStep));
+
+    const line = document.querySelector('[data-step-line]');
+    const label = document.querySelector('[data-step-label]');
+    const pct = ((currentStep + 1) / all.length) * 100;
+    if(line) line.style.width = pct + '%';
+    if(label) label.textContent = stepTitle(currentStep);
+
+    const prev = document.querySelector('[data-prev]');
+    const next = document.querySelector('[data-next]');
+    if(prev) prev.disabled = currentStep === 0;
+    if(next) next.textContent = currentStep === all.length - 1 ? 'Validation' : 'Suivant';
+    document.body.classList.toggle('on-final-step', currentStep === all.length - 1);
+
+    const sheet = document.querySelector('.sheet');
+    if(sheet) sheet.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  function validateVisibleStep(){
+    const s = steps()[currentStep];
+    if(!s) return true;
+    let ok = true;
+    s.querySelectorAll('[data-required]').forEach(field=>{
+      const input = field.querySelector('input,select,textarea');
+      if(!input) return;
+      const empty = !String(input.value || '').trim();
+      field.classList.toggle('invalid', empty);
+      if(empty) ok = false;
+    });
+    return ok;
+  }
+
+  function serializeForm(){
+    const form = document.getElementById('form');
+    if(!form) return {};
+    const data = {};
+    form.querySelectorAll('input,textarea,select').forEach(el=>{
+      if(!el.name && !el.id) return;
+      if(el.type === 'file') return;
+      const key = el.name || el.id;
+      if(el.type === 'checkbox'){
+        data[key] = el.checked;
+      }else{
+        data[key] = el.value;
+      }
+    });
+    return data;
+  }
+
+  function save(){
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        data: serializeForm(),
+        step: currentStep,
+        savedAt: Date.now()
+      }));
+    }catch(e){}
+  }
+
+  function restore(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return;
+      const saved = JSON.parse(raw);
+      const data = saved.data || {};
+      const form = document.getElementById('form');
+      if(!form) return;
+      form.querySelectorAll('input,textarea,select').forEach(el=>{
+        if(el.type === 'file') return;
+        const key = el.name || el.id;
+        if(!(key in data)) return;
+        if(el.type === 'checkbox'){
+          el.checked = !!data[key];
+        }else{
+          el.value = data[key];
+        }
+      });
+      if(typeof saved.step === 'number') currentStep = saved.step;
+    }catch(e){}
+  }
+
+  function fileSize(n){
+    if(!n && n !== 0) return '';
+    const units = ['o','Ko','Mo','Go'];
+    let i = 0, v = n;
+    while(v >= 1024 && i < units.length - 1){ v /= 1024; i++; }
+    return (i === 0 ? v : v.toFixed(v < 10 ? 1 : 0)) + ' ' + units[i];
+  }
+
+  function enhanceImagePreviews(){
+    document.querySelectorAll('input[type="file"]').forEach(input=>{
+      if(input.dataset.previewEnhanced) return;
+      input.dataset.previewEnhanced = '1';
+      input.addEventListener('change', function(){
+        const field = input.closest('.field') || input.closest('.row-card') || document;
+        let list = field.querySelector('.files');
+        if(!list && input.name){
+          list = document.querySelector('.files[data-list="'+input.name+'"]');
+        }
+        if(!list) return;
+        setTimeout(()=>{
+          const files = Array.from(input.files || []);
+          if(!files.some(f => f.type && f.type.startsWith('image/'))) return;
+          list.innerHTML = '';
+          files.forEach(file=>{
+            const li = document.createElement('li');
+            const img = document.createElement('img');
+            img.className = 'thumb';
+            img.alt = '';
+            img.src = URL.createObjectURL(file);
+            img.onload = () => URL.revokeObjectURL(img.src);
+
+            const name = document.createElement('span');
+            name.className = 'fn';
+            name.textContent = file.name;
+
+            const size = document.createElement('span');
+            size.className = 'fs';
+            size.textContent = fileSize(file.size);
+
+            li.appendChild(img);
+            li.appendChild(name);
+            li.appendChild(size);
+            list.appendChild(li);
+          });
+        }, 60);
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    restore();
+    showStep(currentStep);
+
+    const form = document.getElementById('form');
+    if(form){
+      form.addEventListener('input', save);
+      form.addEventListener('change', save);
+      form.addEventListener('submit', function(){
+        try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+      });
+    }
+
+    const next = document.querySelector('[data-next]');
+    const prev = document.querySelector('[data-prev]');
+    if(next){
+      next.addEventListener('click', function(){
+        if(!validateVisibleStep()) return;
+        showStep(currentStep + 1);
+        save();
+      });
+    }
+    if(prev){
+      prev.addEventListener('click', function(){
+        showStep(currentStep - 1);
+        save();
+      });
+    }
+
+    enhanceImagePreviews();
+    const obs = new MutationObserver(function(){
+      enhanceImagePreviews();
+      save();
+    });
+    obs.observe(document.body, {childList:true, subtree:true});
+  });
+})();
+</script>
+
 </body>
 </html>

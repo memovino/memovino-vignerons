@@ -450,7 +450,7 @@
             <span class="capsule" aria-hidden="true"></span>
             <div class="sec-titles">
               <h2>Fiches techniques</h2>
-              <p>Les fiches techniques de vos cuvées, au format PDF.</p>
+              <p>Optionnel : joignez ici vos fiches techniques en lot, ou ajoutez-les directement dans chaque cuvée.</p>
             </div>
           </div>
           <div class="field full">
@@ -458,7 +458,7 @@
             <div class="drop" data-input="fiches">
               <div class="di">
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h4"/></svg>
-                <b>Joindre vos fiches techniques</b>
+                <b>Joindre des fiches en lot</b>
                 <small>PDF — plusieurs fichiers possibles</small>
               </div>
               <input type="file" name="fiches" accept="application/pdf,.pdf" multiple />
@@ -558,9 +558,53 @@ function addFiles(key, fileList){
   renderFiles(key);
 }
 
+function renderCuveeFiles(card, key){
+  const ul = card.querySelector(`[data-cfile-list="${key}"]`);
+  if(!ul) return;
+  ul.innerHTML = '';
+  (card._files?.[key] || []).forEach((f,i)=>{
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="fn">${escapeHtml(f.name)}</span><span class="fs">${fmtSize(f.size)}</span><button type="button" class="rm" aria-label="Retirer">&times;</button>`;
+    li.querySelector('.rm').onclick = ()=>{ card._files[key].splice(i,1); renderCuveeFiles(card,key); };
+    ul.appendChild(li);
+  });
+}
+function addCuveeFiles(card, key, fileList){
+  card._files = card._files || { photo:[], fiche:[] };
+  const max = 1;
+  for(const f of fileList){
+    if(f.size > MAX_FILE_MB*1024*1024){
+      alert(`« ${f.name} » dépasse ${MAX_FILE_MB} Mo et n'a pas été ajouté.`);
+      continue;
+    }
+    card._files[key] = [f].slice(0,max); // un fichier par type et par cuvée
+    break;
+  }
+  renderCuveeFiles(card,key);
+}
+function setupCuveeDrops(card){
+  card._files = { photo:[], fiche:[] };
+  $$('[data-cfile]', card).forEach(drop=>{
+    const key = drop.dataset.cfile;
+    const input = drop.querySelector('input[type=file]');
+    drop.addEventListener('click', ()=>input.click());
+    input.addEventListener('change', e=>{ addCuveeFiles(card, key, e.target.files); input.value=''; });
+    ['dragover','dragenter'].forEach(ev=>drop.addEventListener(ev, e=>{e.preventDefault();drop.classList.add('over');}));
+    ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev, e=>{e.preventDefault();drop.classList.remove('over');}));
+    drop.addEventListener('drop', e=>{ if(e.dataTransfer?.files?.length) addCuveeFiles(card, key, e.dataTransfer.files); });
+  });
+}
+function allCuveeFiles(){
+  return $$('[data-repeater="cuvees"] .row-card').flatMap(card=>[
+    ...(card._files?.photo || []),
+    ...(card._files?.fiche || [])
+  ]);
+}
+
 /* wire dropzones */
 $$('.drop').forEach(drop=>{
   const key = drop.dataset.input;
+  if(!key) return;
   const input = drop.querySelector('input[type=file]');
   drop.addEventListener('click', ()=>input.click());
   input.addEventListener('change', e=>{ addFiles(key, e.target.files); input.value=''; });
@@ -585,6 +629,31 @@ const templates = {
       <div class="field"><label>Millésime</label><input data-c="millesime" placeholder="ex. 2022"></div>
       <div class="field"><label>Cépages</label><input data-c="cepages" placeholder="ex. Chardonnay, Pinot…"></div>
       <div class="field"><label>Appellation</label><input data-c="appellation" placeholder="ex. Côtes de Sambre…"></div>
+      <div class="taste-label">Documents de la cuvée</div>
+      <div class="field">
+        <label>Photo de la cuvée <span class="hint">(image)</span></label>
+        <div class="drop" data-cfile="photo">
+          <div class="di">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <b>Ajouter la photo</b>
+            <small>JPG / PNG / WebP</small>
+          </div>
+          <input type="file" accept="image/*" />
+        </div>
+        <ul class="files" data-cfile-list="photo"></ul>
+      </div>
+      <div class="field">
+        <label>Fiche technique <span class="hint">(PDF)</span></label>
+        <div class="drop" data-cfile="fiche">
+          <div class="di">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h4"/></svg>
+            <b>Ajouter la fiche</b>
+            <small>PDF</small>
+          </div>
+          <input type="file" accept="application/pdf,.pdf" />
+        </div>
+        <ul class="files" data-cfile-list="fiche"></ul>
+      </div>
       <div class="taste-label">Profil de dégustation</div>
       <div class="field full"><label>Œil</label><textarea data-c="oeil" class="ta-sm" placeholder="Robe, couleur, brillance, effervescence…"></textarea></div>
       <div class="field full"><label>Nez</label><textarea data-c="nez" class="ta-sm" placeholder="Arômes, intensité, complexité…"></textarea></div>
@@ -612,6 +681,7 @@ function addRow(key){
   const div = document.createElement('div');
   div.className='row-card';
   div.innerHTML = templates[key](n);
+  if(key==='cuvees') setupCuveeDrops(div);
   div.querySelector('.row-del').onclick = ()=>{ div.remove(); renumber(key); };
   wrap.appendChild(div);
 }
@@ -624,6 +694,20 @@ function collectRows(key){
     const o={}; $$('[data-c]',card).forEach(i=>o[i.dataset.c]=i.value.trim());
     return o;
   }).filter(o=>Object.values(o).some(v=>v));
+}
+
+async function collectCuvees(){
+  const rows = [];
+  for(const card of $$('[data-repeater="cuvees"] .row-card')){
+    const o = {};
+    $$('[data-c]',card).forEach(i=>o[i.dataset.c]=i.value.trim());
+    o.photo = await Promise.all((card._files?.photo || []).map(toB64));
+    o.fiche = await Promise.all((card._files?.fiche || []).map(toB64));
+    const hasText = Object.entries(o).some(([k,v])=>k!=='photo' && k!=='fiche' && v);
+    const hasFiles = o.photo.length || o.fiche.length;
+    if(hasText || hasFiles) rows.push(o);
+  }
+  return rows;
 }
 
 /* ---------- validation ---------- */
@@ -655,7 +739,7 @@ $('#form').addEventListener('submit', async e=>{
   e.preventDefault();
   if(!validate()) return;
 
-  const total = [...stores.photos,...stores.liste,...stores.fiches].reduce((s,f)=>s+f.size,0);
+  const total = [...stores.photos,...stores.liste,...stores.fiches,...allCuveeFiles()].reduce((s,f)=>s+f.size,0);
   if(total > MAX_TOTAL_MB*1024*1024){
     alert(`L'ensemble des fichiers dépasse ${MAX_TOTAL_MB} Mo. Merci d'en retirer quelques-uns ou d'envoyer les plus volumineux par e-mail.`);
     return;
@@ -691,7 +775,7 @@ $('#form').addEventListener('submit', async e=>{
       email: fd.get('email'), telephone: fd.get('telephone'), site: fd.get('site'),
       reseaux: fd.get('reseaux'), adresse: fd.get('adresse'),
       code_postal: fd.get('code_postal'), ville: fd.get('ville'), histoire: fd.get('histoire'),
-      cuvees: collectRows('cuvees'),
+      cuvees: await collectCuvees(),
       cavistes: collectRows('cavistes'),
       photos: await Promise.all(stores.photos.map(toB64)),
       liste:  await Promise.all(stores.liste.map(toB64)),

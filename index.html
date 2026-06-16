@@ -1836,6 +1836,364 @@ body.show-sticky-brand .step-progress-label{
 }
 
 </style>
+<style>
+
+/* ---------- V15 : PAGE D'ACCUEIL PUIS FORMULAIRE EN ÉTAPES ---------- */
+
+/* Accueil plein, propre */
+.hero{
+  min-height:100vh !important;
+  padding:clamp(42px,8vw,78px) 22px clamp(54px,9vw,90px) !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  overflow:hidden !important;
+}
+
+.hero .eyebrow,
+.hero h1,
+.hero .lede,
+.hero .value-line{
+  opacity:1 !important;
+  max-height:none !important;
+  overflow:visible !important;
+}
+
+.start-form-btn{
+  margin:28px auto 0;
+  border:1.5px solid rgba(244,241,232,.68);
+  background:rgba(244,241,232,.10);
+  color:var(--parchment);
+  font-family:var(--ui);
+  font-size:15px;
+  font-weight:700;
+  letter-spacing:.01em;
+  padding:14px 22px;
+  border-radius:999px;
+  cursor:pointer;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  transition:background .15s ease,transform .12s ease,border-color .15s ease;
+  opacity:0;
+  animation:fade .9s .82s ease forwards;
+}
+.start-form-btn:hover{
+  background:rgba(244,241,232,.18);
+  border-color:rgba(244,241,232,.92);
+  transform:translateY(-1px);
+}
+
+/* Le formulaire est masqué tant que l'utilisateur n'a pas commencé */
+body:not(.form-started) .wrap,
+body:not(.form-started) .pagefoot{
+  display:none !important;
+}
+
+/* Quand le formulaire démarre, il apparaît en fondu */
+body.form-started .wrap{
+  display:block !important;
+  opacity:0;
+  transform:translateY(18px);
+  animation:formReveal .45s cubic-bezier(.2,.75,.2,1) forwards;
+}
+@keyframes formReveal{
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* Le formulaire redevient une carte normale, pas de recouvrement bricolé */
+body.form-started .hero{
+  min-height:auto !important;
+  padding:40px 22px 78px !important;
+}
+body.form-started .sheet{
+  margin-top:clamp(-34px,-5vw,-46px) !important;
+  opacity:1 !important;
+  transform:none !important;
+  animation:none !important;
+}
+
+/* Dès que le formulaire a commencé, le bandeau logos reste toujours visible */
+body.form-started .sticky-brand{
+  transform:translate3d(0,0,0) !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+  height:64px !important;
+  z-index:90 !important;
+}
+body.form-started .sticky-brand-inner{
+  height:64px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:clamp(18px,5vw,32px) !important;
+  padding:0 18px !important;
+}
+body.form-started .sticky-brand-title{
+  display:none !important;
+}
+body.form-started .sticky-brand .memovino{
+  width:92px !important;
+  max-height:42px !important;
+}
+body.form-started .sticky-brand .vignerons{
+  width:98px !important;
+  max-height:42px !important;
+}
+body.form-started .sticky-brand .sep{
+  height:30px !important;
+}
+
+/* Progression toujours sous le bandeau pendant le formulaire */
+body.form-started .step-progress{
+  position:fixed !important;
+  top:64px !important;
+  left:0 !important;
+  right:0 !important;
+  z-index:89 !important;
+  height:58px !important;
+  margin:0 !important;
+  padding:10px 18px 11px !important;
+  background:rgba(252,251,246,.99) !important;
+  border-bottom:1px solid var(--sand) !important;
+  box-shadow:0 14px 28px -26px rgba(30,38,31,.55) !important;
+  overflow:visible !important;
+}
+body.form-started .step-progress-line{
+  height:3px !important;
+  max-width:var(--maxw) !important;
+  margin:0 auto !important;
+}
+body.form-started .step-progress-label{
+  display:block !important;
+  max-width:var(--maxw) !important;
+  margin:13px auto 0 !important;
+  text-align:left !important;
+  font-size:11px !important;
+  line-height:1.25 !important;
+  font-weight:700 !important;
+  color:var(--forest-soft) !important;
+  overflow:visible !important;
+  white-space:normal !important;
+}
+
+/* L'espace pour ne jamais passer sous le bandeau */
+body.form-started .wrap{
+  padding-top:122px !important;
+}
+body.form-started .form-step{
+  scroll-margin-top:150px !important;
+}
+
+/* Le texte d'accueil ne doit plus s'afficher pendant le formulaire */
+body.form-started .hero .eyebrow,
+body.form-started .hero h1,
+body.form-started .hero .lede,
+body.form-started .hero .value-line,
+body.form-started .hero .start-form-btn{
+  display:none !important;
+}
+
+/* Pendant l'accueil, pas de sticky/progression visible */
+body:not(.form-started) .sticky-brand,
+body:not(.form-started) .step-progress{
+  display:none !important;
+}
+
+@media (max-width:560px){
+  body.form-started .sticky-brand{
+    height:58px !important;
+  }
+  body.form-started .sticky-brand-inner{
+    height:58px !important;
+    gap:16px !important;
+    padding:0 12px !important;
+  }
+  body.form-started .sticky-brand .memovino{
+    width:78px !important;
+    max-width:34vw !important;
+    max-height:38px !important;
+  }
+  body.form-started .sticky-brand .vignerons{
+    width:84px !important;
+    max-width:34vw !important;
+    max-height:38px !important;
+  }
+  body.form-started .sticky-brand .sep{
+    height:28px !important;
+  }
+  body.form-started .step-progress{
+    top:58px !important;
+    height:64px !important;
+    padding:10px 16px 11px !important;
+  }
+  body.form-started .wrap{
+    padding-top:128px !important;
+  }
+  body.form-started .hero{
+    padding:24px 14px 56px !important;
+  }
+  .start-form-btn{
+    font-size:14px;
+    padding:13px 18px;
+  }
+}
+
+</style>
+<style>
+
+/* ---------- V16 : APRÈS COMMENCER, L'ACCUEIL DISPARAÎT COMPLÈTEMENT ---------- */
+
+/* Quand le formulaire commence, on retire totalement le hero de présentation */
+body.form-started .hero{
+  display:none !important;
+}
+
+/* Le formulaire devient le vrai premier écran */
+body.form-started .wrap{
+  display:block !important;
+  padding-top:132px !important;
+  padding-bottom:clamp(56px,9vw,96px) !important;
+  animation:formReveal .45s cubic-bezier(.2,.75,.2,1) forwards;
+}
+
+/* La carte ne remonte plus dans l'ancien hero */
+body.form-started .sheet{
+  margin-top:0 !important;
+}
+
+/* Bandeau compact logos toujours affiché */
+body.form-started .sticky-brand{
+  display:block !important;
+  position:fixed !important;
+  top:0 !important;
+  left:0 !important;
+  right:0 !important;
+  height:64px !important;
+  opacity:1 !important;
+  transform:translate3d(0,0,0) !important;
+  pointer-events:auto !important;
+  z-index:100 !important;
+}
+
+body.form-started .sticky-brand-inner{
+  height:64px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:clamp(18px,5vw,32px) !important;
+  padding:0 18px !important;
+}
+
+body.form-started .sticky-brand-title{
+  display:none !important;
+}
+
+body.form-started .sticky-brand .memovino{
+  width:92px !important;
+  max-height:42px !important;
+}
+
+body.form-started .sticky-brand .vignerons{
+  width:98px !important;
+  max-height:42px !important;
+}
+
+body.form-started .sticky-brand .sep{
+  height:30px !important;
+}
+
+/* Progression fixe juste en dessous */
+body.form-started .step-progress{
+  display:block !important;
+  position:fixed !important;
+  top:64px !important;
+  left:0 !important;
+  right:0 !important;
+  z-index:99 !important;
+  height:58px !important;
+  margin:0 !important;
+  padding:10px 18px 11px !important;
+  background:rgba(252,251,246,.99) !important;
+  border-bottom:1px solid var(--sand) !important;
+  box-shadow:0 14px 28px -26px rgba(30,38,31,.55) !important;
+  overflow:visible !important;
+}
+
+body.form-started .step-progress-line{
+  height:3px !important;
+  max-width:var(--maxw) !important;
+  margin:0 auto !important;
+}
+
+body.form-started .step-progress-label{
+  max-width:var(--maxw) !important;
+  margin:13px auto 0 !important;
+  text-align:left !important;
+  font-size:11px !important;
+  line-height:1.25 !important;
+  font-weight:700 !important;
+  color:var(--forest-soft) !important;
+  overflow:visible !important;
+  white-space:normal !important;
+}
+
+/* Pendant l'accueil, le formulaire et le sticky restent cachés */
+body:not(.form-started) .wrap,
+body:not(.form-started) .pagefoot,
+body:not(.form-started) .sticky-brand,
+body:not(.form-started) .step-progress{
+  display:none !important;
+}
+
+/* Mobile */
+@media (max-width:560px){
+  body.form-started .wrap{
+    padding-top:132px !important;
+  }
+
+  body.form-started .sticky-brand{
+    height:58px !important;
+  }
+
+  body.form-started .sticky-brand-inner{
+    height:58px !important;
+    gap:16px !important;
+    padding:0 12px !important;
+  }
+
+  body.form-started .sticky-brand .memovino{
+    width:78px !important;
+    max-width:34vw !important;
+    max-height:38px !important;
+  }
+
+  body.form-started .sticky-brand .vignerons{
+    width:84px !important;
+    max-width:34vw !important;
+    max-height:38px !important;
+  }
+
+  body.form-started .sticky-brand .sep{
+    height:28px !important;
+  }
+
+  body.form-started .step-progress{
+    top:58px !important;
+    height:64px !important;
+    padding:10px 16px 11px !important;
+  }
+
+  body.form-started .step-progress-label{
+    font-size:11px !important;
+    margin-top:13px !important;
+  }
+}
+
+</style>
 </head>
 <body>
 
@@ -1858,6 +2216,7 @@ body.show-sticky-brand .step-progress-label{
     <h1>Rejoignez Memovino, <em>racontez votre vin</em></h1>
     <p class="lede">Quelques informations sur votre domaine, vos cuvées et vos partenaires suffisent pour faire entrer votre travail dans la communauté Memovino.</p>
     <p class="value-line">Rejoignez la première application qui référencera 100&nbsp;% des vins wallons.</p>
+    <button type="button" class="start-form-btn" data-start-form>Commencer à remplir le formulaire</button>
   </header>
 
   <main class="wrap">
@@ -2870,6 +3229,110 @@ $('#form').addEventListener('submit', async e=>{
       setTimeout(scrollFormBelowSticky, 120);
     }
   }, true);
+})();
+</script>
+
+
+<script>
+/* V15 : démarrage volontaire du formulaire */
+(function(){
+  function startForm(){
+    document.body.classList.add('form-started');
+    document.body.classList.add('show-sticky-brand');
+
+    const sheet = document.querySelector('.sheet');
+    if(sheet){
+      setTimeout(function(){
+        const y = sheet.getBoundingClientRect().top + window.pageYOffset - 132;
+        window.scrollTo({top:Math.max(0,y), behavior:'smooth'});
+      }, 80);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    const btn = document.querySelector('[data-start-form]');
+    if(btn) btn.addEventListener('click', startForm);
+  });
+})();
+</script>
+
+
+<script>
+/* V16 : clic Commencer = bascule complète vers l'écran formulaire */
+(function(){
+  function startFormV16(){
+    document.body.classList.add('form-started');
+    document.body.classList.add('show-sticky-brand');
+    document.body.classList.add('has-scrolled');
+
+    setTimeout(function(){
+      window.scrollTo({top:0, behavior:'smooth'});
+    }, 60);
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    const btn = document.querySelector('[data-start-form]');
+    if(btn){
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        startFormV16();
+      }, true);
+    }
+  });
+})();
+</script>
+
+
+<script>
+/* V17 : après Commencer, toujours démarrer à l'étape 1 */
+(function(){
+  function forceStepOne(){
+    const steps = Array.from(document.querySelectorAll('.form-step'));
+    if(!steps.length) return;
+
+    steps.forEach((step, index)=>{
+      step.classList.toggle('active', index === 0);
+    });
+
+    const line = document.querySelector('[data-step-line]');
+    const label = document.querySelector('[data-step-label]');
+    if(line) line.style.width = (100 / steps.length) + '%';
+    if(label) label.textContent = 'Étape 1/' + steps.length + ' • ' + (steps[0].dataset.stepTitle || 'Informations du domaine');
+
+    const prev = document.querySelector('[data-prev]');
+    const next = document.querySelector('[data-next]');
+    if(prev) prev.disabled = true;
+    if(next){
+      next.style.display = '';
+      next.textContent = 'Suivant';
+    }
+
+    document.body.classList.remove('on-final-step');
+  }
+
+  function startFormAtStepOne(){
+    document.body.classList.add('form-started');
+    document.body.classList.add('show-sticky-brand');
+    document.body.classList.add('has-scrolled');
+
+    forceStepOne();
+
+    setTimeout(function(){
+      window.scrollTo({top:0, behavior:'smooth'});
+      forceStepOne();
+    }, 80);
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    const btn = document.querySelector('[data-start-form]');
+    if(btn){
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        startFormAtStepOne();
+      }, true);
+    }
+  });
 })();
 </script>
 

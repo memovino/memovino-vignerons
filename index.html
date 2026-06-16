@@ -663,9 +663,26 @@ $('#form').addEventListener('submit', async e=>{
 
   document.body.classList.add('sending');
   $('.submit').disabled = true;
-  $('.submit .lbl').textContent = 'Envoi en cours…';
+  $('.submit .lbl').textContent = 'Préparation…';
+
+  const showSuccess = ()=>{
+    document.body.classList.remove('sending','errored');
+    document.body.classList.add('done');
+    window.scrollTo({top:0,behavior:'smooth'});
+  };
+  const showError = (err)=>{
+    document.body.classList.remove('sending','done');
+    $('#errmsg').textContent = (err && err.message) ? err.message : "Une erreur est survenue pendant l'envoi.";
+    document.body.classList.add('errored');
+    $('.submit').disabled = false;
+    $('.submit .lbl').textContent = 'Envoyer le dossier';
+  };
 
   try{
+    if(!SCRIPT_URL || SCRIPT_URL.includes('PASTE_YOUR')){
+      throw new Error("L'URL du script (SCRIPT_URL) n'a pas encore été configurée.");
+    }
+
     const fd = new FormData(e.target);
     const payload = {
       submittedAt: new Date().toISOString(),
@@ -681,29 +698,31 @@ $('#form').addEventListener('submit', async e=>{
       fiches: await Promise.all(stores.fiches.map(toB64)),
     };
 
-    if(!SCRIPT_URL || SCRIPT_URL.includes('PASTE_YOUR')){
-      throw new Error("L'URL du script (SCRIPT_URL) n'a pas encore été configurée.");
-    }
+    $('.submit .lbl').textContent = 'Envoi…';
 
-    const resp = await fetch(SCRIPT_URL, {
+    // L'envoi part ; le serveur range Drive + Sheet + e-mail. On ne fait pas
+    // patienter l'utilisateur jusqu'au bout : la requête continue en arrière-plan.
+    const sendPromise = fetch(SCRIPT_URL, {
       method:'POST',
-      // text/plain => requête "simple", pas de préflight CORS
-      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      headers:{'Content-Type':'text/plain;charset=utf-8'},   // requête simple => pas de préflight CORS
       body: JSON.stringify(payload)
+    }).then(async resp=>{
+      let result={}; try{ result = await resp.json(); }catch(_){}
+      if(!resp.ok || (result && result.status==='error')) throw new Error(result.message || ('HTTP '+resp.status));
+      return true;
     });
-    let result={};
-    try{ result = await resp.json(); }catch(_){}
-    if(!resp.ok || (result && result.status==='error')) throw new Error(result.message || ('HTTP '+resp.status));
 
-    document.body.classList.add('done');
-    window.scrollTo({top:0,behavior:'smooth'});
+    // Affichage optimiste : succès dès que la requête est partie (max ~0,7 s),
+    // sans attendre la fin du traitement serveur.
+    const quick = new Promise(r=>setTimeout(r, 700));
+    await Promise.race([ sendPromise.then(()=>{}), quick ]);
+    showSuccess();
+
+    // Filet de sécurité : si la requête échoue réellement plus tard, on bascule en erreur.
+    sendPromise.catch(err=>showError(err));
+
   }catch(err){
-    $('#errmsg').textContent = (err && err.message) ? err.message : "Une erreur est survenue pendant l'envoi.";
-    document.body.classList.add('errored');
-  }finally{
-    document.body.classList.remove('sending');
-    $('.submit').disabled=false;
-    $('.submit .lbl').textContent='Envoyer le dossier';
+    showError(err);
   }
 });
 </script>

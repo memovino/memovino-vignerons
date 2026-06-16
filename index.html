@@ -201,6 +201,12 @@
   }
   .row-del:hover{background:#F6EAE7;color:var(--oxblood);}
   .row-card .grid{gap:12px;}
+  .row-card textarea.ta-sm{min-height:58px;}
+  .taste-label{
+    grid-column:1 / -1;font-size:11px;font-weight:700;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--forest-soft);
+    border-top:1px solid var(--sand);padding-top:12px;margin-top:2px;
+  }
   .add-btn{
     display:inline-flex;align-items:center;gap:9px;
     background:transparent;border:1.5px solid var(--forest);
@@ -221,7 +227,13 @@
   /* ---------- SUBMIT ---------- */
   .footer-actions{margin-top:30px;padding-top:26px;border-top:1px solid var(--sand);}
   .consent{display:flex;gap:11px;align-items:flex-start;font-size:13px;color:var(--forest-soft);margin-bottom:18px;}
-  .consent input{width:18px;height:18px;flex:0 0 auto;margin-top:1px;accent-color:var(--forest);}
+  .consent strong{color:var(--ink);font-weight:700;}
+  .consent input[type="checkbox"]{
+    -webkit-appearance:auto;appearance:auto;
+    width:18px;height:18px;min-width:18px;flex:0 0 auto;margin-top:1px;
+    padding:0;border:0;background:none;border-radius:0;
+    accent-color:var(--forest);cursor:pointer;
+  }
   .submit{
     width:100%;border:0;cursor:pointer;
     font-family:var(--ui);font-weight:700;font-size:16px;letter-spacing:.01em;
@@ -345,6 +357,14 @@
               <span class="err">Ce champ est requis.</span>
             </div>
             <div class="field">
+              <label>Seconde personne de contact <span class="hint">(optionnel)</span></label>
+              <input name="contact2_nom" autocomplete="name" placeholder="Prénom et nom" />
+            </div>
+            <div class="field">
+              <label>GSM 2ᵉ contact <span class="hint">(optionnel)</span></label>
+              <input name="contact2_gsm" type="tel" placeholder="+32 4xx …" />
+            </div>
+            <div class="field">
               <label>Site web <span class="hint">(optionnel)</span></label>
               <input name="site" type="url" placeholder="https://…" />
             </div>
@@ -353,8 +373,16 @@
               <input name="reseaux" placeholder="Instagram, Facebook…" />
             </div>
             <div class="field full">
-              <label>Adresse du domaine <span class="hint">(commune / région)</span></label>
-              <input name="adresse" placeholder="ex. 5032 Bovesse, Namur" />
+              <label>Adresse <span class="hint">(rue et numéro)</span></label>
+              <input name="adresse" autocomplete="street-address" placeholder="ex. Rue de la Vigne 12" />
+            </div>
+            <div class="field">
+              <label>Code postal</label>
+              <input name="code_postal" autocomplete="postal-code" placeholder="ex. 5032" />
+            </div>
+            <div class="field">
+              <label>Ville</label>
+              <input name="ville" autocomplete="address-level2" placeholder="ex. Bovesse" />
             </div>
           </div>
         </section>
@@ -456,7 +484,7 @@
         <div class="footer-actions">
           <label class="consent">
             <input type="checkbox" id="consent" />
-            <span>J'accepte que Memovino utilise ces informations dans le cadre du partenariat avec l'Association des Vignerons de Wallonie.</span>
+            <span>J'accepte que ces informations soient utilisées <strong>uniquement par Memovino</strong>, dans le cadre du partenariat avec l'Association des Vignerons de Wallonie. Elles ne sont <strong>transmises à aucun tiers</strong>.</span>
           </label>
           <button type="submit" class="submit"><span class="spin"></span><span class="lbl">Envoyer le dossier</span></button>
           <p class="formnote">Vos fichiers sont transmis de manière sécurisée. Champs marqués <span style="color:var(--oxblood)">*</span> obligatoires.</p>
@@ -557,6 +585,11 @@ const templates = {
       <div class="field"><label>Millésime</label><input data-c="millesime" placeholder="ex. 2022"></div>
       <div class="field"><label>Cépages</label><input data-c="cepages" placeholder="ex. Chardonnay, Pinot…"></div>
       <div class="field"><label>Appellation</label><input data-c="appellation" placeholder="ex. Côtes de Sambre…"></div>
+      <div class="taste-label">Profil de dégustation</div>
+      <div class="field full"><label>Œil</label><textarea data-c="oeil" class="ta-sm" placeholder="Robe, couleur, brillance, effervescence…"></textarea></div>
+      <div class="field full"><label>Nez</label><textarea data-c="nez" class="ta-sm" placeholder="Arômes, intensité, complexité…"></textarea></div>
+      <div class="field full"><label>Bouche</label><textarea data-c="bouche" class="ta-sm" placeholder="Attaque, structure, longueur, finale…"></textarea></div>
+      <div class="field full"><label>Commentaires</label><textarea data-c="commentaires" class="ta-sm" placeholder="Accords mets-vins, potentiel de garde, remarques…"></textarea></div>
     </div>`,
   cavistes: (n)=>`
     <span class="row-num">Caviste ${n}</span>
@@ -637,8 +670,10 @@ $('#form').addEventListener('submit', async e=>{
     const payload = {
       submittedAt: new Date().toISOString(),
       domaine: fd.get('domaine'), contact_nom: fd.get('contact_nom'), contact_fonction: fd.get('contact_fonction'),
+      contact2_nom: fd.get('contact2_nom'), contact2_gsm: fd.get('contact2_gsm'),
       email: fd.get('email'), telephone: fd.get('telephone'), site: fd.get('site'),
-      reseaux: fd.get('reseaux'), adresse: fd.get('adresse'), histoire: fd.get('histoire'),
+      reseaux: fd.get('reseaux'), adresse: fd.get('adresse'),
+      code_postal: fd.get('code_postal'), ville: fd.get('ville'), histoire: fd.get('histoire'),
       cuvees: collectRows('cuvees'),
       cavistes: collectRows('cavistes'),
       photos: await Promise.all(stores.photos.map(toB64)),

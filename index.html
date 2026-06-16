@@ -2194,6 +2194,49 @@ body:not(.form-started) .step-progress{
 }
 
 </style>
+<style>
+
+/* ---------- V18 : RÉDUCTION ESPACE HAUT SUR MOBILE ---------- */
+@media (max-width:560px){
+
+  body.form-started .wrap{
+    padding-top:112px !important;
+  }
+
+  body.form-started .sheet{
+    padding-top:18px !important;
+  }
+
+  body.form-started .form-step.active{
+    padding-top:0 !important;
+  }
+
+  .form-step .section{
+    padding-top:0 !important;
+  }
+
+  .sec-head{
+    margin-bottom:18px !important;
+  }
+
+  body.form-started .step-progress{
+    height:54px !important;
+    padding-top:8px !important;
+    padding-bottom:8px !important;
+  }
+
+  body.form-started .step-progress-label{
+    margin-top:10px !important;
+  }
+}
+
+@media (max-width:380px){
+  body.form-started .wrap{
+    padding-top:106px !important;
+  }
+}
+
+</style>
 </head>
 <body>
 

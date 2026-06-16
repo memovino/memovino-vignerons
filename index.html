@@ -1554,6 +1554,149 @@ body.show-sticky-brand .form-step.active{
 }
 
 </style>
+<style>
+
+/* ---------- V13 : STICKY MOBILE FIABLE, AUCUN TITRE TRONQUÉ ---------- */
+
+/* Desktop : on garde la logique actuelle */
+body.show-sticky-brand .step-progress-label{
+  overflow:visible !important;
+  white-space:normal !important;
+}
+
+/* MOBILE : on simplifie radicalement pour éviter tout recouvrement */
+@media (max-width:560px){
+
+  :root{
+    --sticky-brand-h:58px;
+    --sticky-progress-h:64px;
+    --sticky-total-h:122px;
+  }
+
+  /* Le bandeau logo est uniquement réservé aux logos */
+  body.show-sticky-brand .sticky-brand{
+    height:var(--sticky-brand-h) !important;
+    min-height:var(--sticky-brand-h) !important;
+    max-height:var(--sticky-brand-h) !important;
+    overflow:hidden !important;
+  }
+
+  body.show-sticky-brand .sticky-brand-inner{
+    height:var(--sticky-brand-h) !important;
+    min-height:var(--sticky-brand-h) !important;
+    max-height:var(--sticky-brand-h) !important;
+    display:flex !important;
+    justify-content:center !important;
+    align-items:center !important;
+    gap:14px !important;
+    padding:0 12px !important;
+  }
+
+  /* On retire le titre dossier du bandeau mobile : c'est lui qui créait les conflits */
+  body.show-sticky-brand .sticky-brand-title{
+    display:none !important;
+  }
+
+  body.show-sticky-brand .sticky-brand .memovino{
+    width:82px !important;
+    max-width:34vw !important;
+    max-height:40px !important;
+  }
+
+  body.show-sticky-brand .sticky-brand .sep{
+    display:block !important;
+    width:1px !important;
+    height:30px !important;
+    flex:0 0 1px !important;
+  }
+
+  body.show-sticky-brand .sticky-brand .vignerons{
+    width:88px !important;
+    max-width:34vw !important;
+    max-height:40px !important;
+  }
+
+  /* La progression a son propre bloc, avec une hauteur suffisante */
+  body.show-sticky-brand .step-progress{
+    position:fixed !important;
+    top:var(--sticky-brand-h) !important;
+    left:0 !important;
+    right:0 !important;
+    z-index:89 !important;
+    height:var(--sticky-progress-h) !important;
+    min-height:var(--sticky-progress-h) !important;
+    max-height:none !important;
+    margin:0 !important;
+    padding:10px 18px 11px !important;
+    background:rgba(252,251,246,.99) !important;
+    border-bottom:1px solid var(--sand) !important;
+    box-shadow:0 14px 28px -26px rgba(30,38,31,.55) !important;
+    overflow:visible !important;
+  }
+
+  body.show-sticky-brand .step-progress-line{
+    width:100% !important;
+    height:3px !important;
+    margin:0 !important;
+  }
+
+  /* Le titre d'étape est toujours visible, à gauche, jamais tronqué */
+  body.show-sticky-brand .step-progress-label{
+    display:block !important;
+    width:100% !important;
+    max-width:none !important;
+    height:auto !important;
+    max-height:none !important;
+    margin:13px 0 0 !important;
+    padding:0 !important;
+    text-align:left !important;
+    font-size:11px !important;
+    line-height:1.25 !important;
+    font-weight:700 !important;
+    letter-spacing:.02em !important;
+    color:var(--forest-soft) !important;
+    overflow:visible !important;
+    white-space:normal !important;
+  }
+
+  /* Le contenu commence clairement sous le sticky */
+  body.show-sticky-brand .form-step.active{
+    padding-top:calc(var(--sticky-total-h) - 30px) !important;
+  }
+
+  body.show-sticky-brand .sheet{
+    padding-top:20px !important;
+  }
+
+  .form-step{
+    scroll-margin-top:calc(var(--sticky-total-h) + 24px) !important;
+  }
+}
+
+@media (max-width:380px){
+  body.show-sticky-brand .sticky-brand-inner{
+    gap:10px !important;
+  }
+
+  body.show-sticky-brand .sticky-brand .memovino{
+    width:72px !important;
+  }
+
+  body.show-sticky-brand .sticky-brand .vignerons{
+    width:78px !important;
+  }
+
+  body.show-sticky-brand .step-progress{
+    padding-left:14px !important;
+    padding-right:14px !important;
+  }
+
+  body.show-sticky-brand .step-progress-label{
+    font-size:10.5px !important;
+  }
+}
+
+</style>
 </head>
 <body>
 
@@ -2564,6 +2707,30 @@ $('#form').addEventListener('submit', async e=>{
       }
     }, true);
   });
+})();
+</script>
+
+
+<script>
+/* V13 : scroll mobile sous sticky complet */
+(function(){
+  function scrollFormBelowSticky(){
+    const sheet = document.querySelector('.sheet');
+    if(!sheet) return;
+
+    const isMobile = window.matchMedia('(max-width:560px)').matches;
+    const stickyVisible = document.body.classList.contains('show-sticky-brand');
+    const offset = stickyVisible ? (isMobile ? 134 : 126) : 18;
+
+    const y = sheet.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({top:Math.max(0,y), behavior:'smooth'});
+  }
+
+  document.addEventListener('click', function(e){
+    if(e.target.closest('[data-next]') || e.target.closest('[data-prev]')){
+      setTimeout(scrollFormBelowSticky, 120);
+    }
+  }, true);
 })();
 </script>
 

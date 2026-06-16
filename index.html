@@ -1697,6 +1697,145 @@ body.show-sticky-brand .step-progress-label{
 }
 
 </style>
+<style>
+
+/* ---------- V14 : LE FORMULAIRE RECOUVRE LE TEXTE HERO AU SCROLL ---------- */
+
+/* Le hero devient une zone arrière-plan stable : le texte reste dessous */
+.hero{
+  position:relative !important;
+  z-index:1 !important;
+  min-height:clamp(360px,58vh,520px) !important;
+  padding-bottom:clamp(120px,18vh,180px) !important;
+  overflow:hidden !important;
+}
+
+/* Le formulaire passe au-dessus du texte d'accueil */
+.wrap{
+  position:relative !important;
+  z-index:5 !important;
+}
+
+.sheet{
+  position:relative !important;
+  z-index:6 !important;
+  margin-top:clamp(-120px,-16vh,-92px) !important;
+  opacity:1 !important;
+  transform:none !important;
+  animation:none !important;
+}
+
+/* Au scroll, on ne masque plus le texte : il se fait simplement recouvrir par la carte */
+body.show-sticky-brand .hero .eyebrow,
+body.show-sticky-brand .hero h1,
+body.show-sticky-brand .hero .lede,
+body.show-sticky-brand .hero .value-line,
+body.has-scrolled .hero .eyebrow,
+body.has-scrolled .hero h1,
+body.has-scrolled .hero .lede,
+body.has-scrolled .hero .value-line{
+  opacity:1 !important;
+  max-height:none !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  overflow:visible !important;
+}
+
+/* Le bandeau du haut ne garde que les logos */
+body.show-sticky-brand .sticky-brand-title{
+  display:none !important;
+}
+
+body.show-sticky-brand .sticky-brand-inner{
+  justify-content:center !important;
+  padding-left:18px !important;
+  padding-right:18px !important;
+  gap:clamp(18px,5vw,32px) !important;
+}
+
+body.show-sticky-brand .sticky-brand .memovino{
+  width:92px !important;
+  max-height:44px !important;
+}
+
+body.show-sticky-brand .sticky-brand .vignerons{
+  width:98px !important;
+  max-height:44px !important;
+}
+
+/* La barre de progression reste sous les logos, mais sans titre tronqué */
+body.show-sticky-brand .step-progress-label{
+  white-space:normal !important;
+  overflow:visible !important;
+}
+
+/* Mobile : effet recouvrement plus rapide et plus propre */
+@media (max-width:560px){
+  .hero{
+    min-height:430px !important;
+    padding-top:40px !important;
+    padding-bottom:155px !important;
+  }
+
+  .sheet{
+    margin-top:-150px !important;
+    border-radius:14px !important;
+  }
+
+  body.show-sticky-brand .sticky-brand{
+    height:58px !important;
+  }
+
+  body.show-sticky-brand .sticky-brand-inner{
+    height:58px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:16px !important;
+    padding:0 12px !important;
+  }
+
+  body.show-sticky-brand .sticky-brand .memovino{
+    width:78px !important;
+    max-width:34vw !important;
+    max-height:38px !important;
+  }
+
+  body.show-sticky-brand .sticky-brand .vignerons{
+    width:84px !important;
+    max-width:34vw !important;
+    max-height:38px !important;
+  }
+
+  body.show-sticky-brand .sticky-brand .sep{
+    height:28px !important;
+  }
+
+  body.show-sticky-brand .step-progress{
+    top:58px !important;
+  }
+}
+
+@media (max-width:380px){
+  .hero{
+    min-height:450px !important;
+    padding-bottom:165px !important;
+  }
+
+  .sheet{
+    margin-top:-160px !important;
+  }
+
+  body.show-sticky-brand .sticky-brand .memovino{
+    width:70px !important;
+  }
+
+  body.show-sticky-brand .sticky-brand .vignerons{
+    width:76px !important;
+  }
+}
+
+</style>
 </head>
 <body>
 

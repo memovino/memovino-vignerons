@@ -112,19 +112,20 @@
     border-radius:var(--radius-sm);
     padding:12px 15px;margin-bottom:22px;
   }
-  .wine-load{display:inline-flex;align-items:center;gap:11px;}
-  .wine-glass{width:18px;height:26px;flex:0 0 auto;display:block;}
-  .wine-glass .wine{
-    transform-box:fill-box;transform-origin:center bottom;
-    animation:wineFill 1.9s ease-in-out infinite;
-  }
-  @keyframes wineFill{
-    0%{transform:translateY(106%);}
-    55%{transform:translateY(0);}
-    100%{transform:translateY(0);}
-  }
+  .vine-load{display:inline-flex;align-items:center;gap:11px;}
+  .vine{width:20px;height:26px;flex:0 0 auto;display:block;}
+  .vine .grp{animation:vineCycle 3.6s ease-in-out infinite;}
+  .vine .stem{stroke-dasharray:50;stroke-dashoffset:50;animation:stemGrow 3.6s ease-in-out infinite;}
+  .vine .leaf{transform-box:fill-box;transform-origin:center;animation:leafPop 3.6s ease-in-out infinite;}
+  .vine .grape{transform-box:fill-box;transform-origin:center;animation:grapePop 3.6s ease-in-out infinite;}
+  @keyframes vineCycle{0%{opacity:0}6%{opacity:1}88%{opacity:1}100%{opacity:0}}
+  @keyframes stemGrow{0%{stroke-dashoffset:50}42%{stroke-dashoffset:0}100%{stroke-dashoffset:0}}
+  @keyframes leafPop{0%,32%{transform:scale(0)}48%{transform:scale(1.08)}55%,100%{transform:scale(1)}}
+  @keyframes grapePop{0%,50%{transform:scale(0)}68%{transform:scale(1.12)}76%,100%{transform:scale(1)}}
   @media (prefers-reduced-motion:reduce){
-    .wine-glass .wine{animation:none;transform:translateY(0);}
+    .vine .stem{stroke-dashoffset:0;animation:none}
+    .vine .leaf,.vine .grape{transform:scale(1);animation:none}
+    .vine .grp{opacity:1;animation:none}
   }
 
   /* ---------- SECTION ---------- */
@@ -653,8 +654,8 @@ function prefill(d){
 }
 if(RESUME_ID && SCRIPT_URL && !SCRIPT_URL.includes('PASTE_YOUR')){
   const banner=$('#resumeBanner');
-  const WINE_LOADER = '<span class="wine-load"><svg class="wine-glass" viewBox="0 0 28 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><clipPath id="bowlClip"><path d="M8 5 L20 5 Q19 17 14 17 Q9 17 8 5 Z"/></clipPath></defs><rect class="wine" x="6" y="4" width="16" height="14" fill="#8A2B3C" clip-path="url(#bowlClip)"/><path d="M8 5 L20 5 Q19 17 14 17 Q9 17 8 5 Z" stroke="#424F45" stroke-width="1.4" stroke-linejoin="round"/><line x1="14" y1="17" x2="14" y2="33" stroke="#424F45" stroke-width="1.4"/><line x1="9" y1="34" x2="19" y2="34" stroke="#424F45" stroke-width="1.4" stroke-linecap="round"/></svg><span>Chargement de votre dossier…</span></span>';
-  if(banner){ banner.innerHTML = WINE_LOADER; banner.style.display='block'; }
+  const VINE_LOADER = '<span class="vine-load"><svg class="vine" viewBox="0 0 32 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g class="grp"><path class="stem" d="M15 39 C 11 32, 19 28, 15 22 C 11 16, 18 14, 17 7" stroke="#424F45" stroke-width="1.6" stroke-linecap="round" fill="none"/><path class="leaf" d="M16 24 C 23 23, 26 18, 25 16 C 19 17, 15 21, 16 24 Z" fill="#5A6B5D"/><path class="leaf" d="M17 9 C 12 7, 8 9, 8 10 C 13 11, 16 11, 17 9 Z" fill="#5A6B5D"/><g fill="#7A3B5C"><circle class="grape" cx="14" cy="11" r="2.4"/><circle class="grape" cx="18.5" cy="11" r="2.4"/><circle class="grape" cx="23" cy="11" r="2.4"/><circle class="grape" cx="16" cy="15" r="2.4"/><circle class="grape" cx="20.5" cy="15" r="2.4"/><circle class="grape" cx="18.3" cy="19" r="2.4"/></g></g></svg><span>La vigne pousse, votre dossier se charge…</span></span>';
+  if(banner){ banner.innerHTML = VINE_LOADER; banner.style.display='block'; }
   fetch(SCRIPT_URL + '?id=' + encodeURIComponent(RESUME_ID))
     .then(r=>r.json())
     .then(res=>{

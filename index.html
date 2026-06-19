@@ -259,6 +259,26 @@
 
   /* ---------- SUBMIT ---------- */
   .footer-actions{margin-top:30px;padding-top:26px;border-top:1px solid var(--sand);}
+
+  /* ---------- WIZARD ---------- */
+  .wizard .section{display:none;border-top:0;padding-top:6px;}
+  .wizard .section.show{display:block;animation:stepIn .35s ease;}
+  @keyframes stepIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+  .wizard-progress{margin-bottom:28px;}
+  .wp-label{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:10px;}
+  .wp-step{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--forest-soft);white-space:nowrap;}
+  .wp-title{font-family:var(--display);font-size:15px;color:var(--forest);text-align:right;}
+  .wp-track{height:5px;background:var(--sand);border-radius:999px;overflow:hidden;}
+  .wp-fill{height:100%;width:0;background:var(--forest);border-radius:999px;transition:width .35s cubic-bezier(.2,.7,.2,1);}
+  .wizard-nav{display:flex;align-items:center;gap:14px;margin-top:30px;padding-top:24px;border-top:1px solid var(--sand);}
+  .nav-back,.nav-next{font-family:var(--ui);font-weight:600;font-size:15px;border-radius:999px;cursor:pointer;padding:14px 26px;transition:transform .12s ease,background .15s ease,border-color .15s ease;}
+  .nav-back{background:transparent;border:1.5px solid var(--sand-deep);color:var(--forest);}
+  .nav-back:hover{border-color:var(--forest);}
+  .nav-next{background:var(--forest);border:0;color:var(--parchment);margin-left:auto;box-shadow:0 12px 26px -14px rgba(66,79,69,.7);}
+  .nav-next:hover{background:#384538;transform:translateY(-1px);}
+  .wizard-nav .submit{width:auto;margin-left:auto;}
+  .nav-back[hidden],.nav-next[hidden],.submit[hidden],.formnote[hidden]{display:none;}
+  @media (prefers-reduced-motion:reduce){ .wizard .section.show{animation:none;} }
   .consent{display:flex;gap:11px;align-items:flex-start;font-size:13px;color:var(--forest-soft);margin-bottom:18px;}
   .consent strong{color:var(--ink);font-weight:700;}
   .consent input[type="checkbox"]{
@@ -358,7 +378,12 @@
       </div>
 
       <!-- LIVE FORM -->
-      <form id="form" class="form-live" novalidate>
+      <form id="form" class="form-live wizard" novalidate>
+
+        <div class="wizard-progress">
+          <div class="wp-label"><span class="wp-step">Étape 1 / 6</span><span class="wp-title">Votre identité</span></div>
+          <div class="wp-track"><div class="wp-fill"></div></div>
+        </div>
 
         <!-- 1. IDENTITÉ -->
         <section class="section">
@@ -532,14 +557,19 @@
         </section>
 
         <!-- ACTIONS -->
-        <div class="footer-actions">
+        <div class="footer-actions" style="display:none;">
           <label class="consent">
             <input type="checkbox" id="consent" />
             <span>J'accepte que ces informations soient utilisées <strong>uniquement par Memovino</strong>, dans le cadre du partenariat avec l'Association des Vignerons de Wallonie. Elles ne sont <strong>transmises à aucun tiers</strong>.</span>
           </label>
-          <button type="submit" class="submit"><span class="spin"></span><span class="lbl">Envoyer le dossier</span></button>
-          <p class="formnote">Vos fichiers sont transmis de manière sécurisée. Champs marqués <span style="color:var(--oxblood)">*</span> obligatoires.</p>
         </div>
+
+        <div class="wizard-nav">
+          <button type="button" class="nav-back" hidden>&larr;&nbsp;Retour</button>
+          <button type="button" class="nav-next">Suivant&nbsp;&rarr;</button>
+          <button type="submit" class="submit" hidden><span class="spin"></span><span class="lbl">Envoyer le dossier</span></button>
+        </div>
+        <p class="formnote" hidden>Vos fichiers sont transmis de manière sécurisée. Champs marqués <span style="color:var(--oxblood)">*</span> obligatoires.</p>
       </form>
 
       <!-- SUCCESS -->
@@ -736,6 +766,43 @@ function toB64(file){
     r.onerror=rej; r.readAsDataURL(file);
   });
 }
+
+/* ---------- WIZARD : un module par écran ---------- */
+const steps = $$('#form .section');
+const wpStep = $('.wp-step'), wpTitle = $('.wp-title'), wpFill = $('.wp-fill');
+const navBack = $('.nav-back'), navNext = $('.nav-next');
+const submitBtn = $('.submit'), consentBox = $('.footer-actions'), formNote = $('.formnote');
+let stepIdx = 0;
+
+function validateStep(sec){
+  let ok=true, first=null;
+  $$('.field[data-required]', sec).forEach(f=>{
+    const inp=f.querySelector('input,select,textarea');
+    let bad = !inp.value.trim();
+    if(!bad && f.dataset.type==='email') bad = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inp.value.trim());
+    f.classList.toggle('invalid',bad);
+    if(bad){ ok=false; first=first||inp; }
+  });
+  if(first) first.focus();
+  return ok;
+}
+function showStep(i){
+  stepIdx = Math.max(0, Math.min(i, steps.length-1));
+  steps.forEach((s,k)=>s.classList.toggle('show', k===stepIdx));
+  const last = stepIdx === steps.length-1;
+  if(wpStep)  wpStep.textContent = 'Étape ' + (stepIdx+1) + ' / ' + steps.length;
+  if(wpTitle){ const h = steps[stepIdx].querySelector('h2'); wpTitle.textContent = h ? h.textContent : ''; }
+  if(wpFill)  wpFill.style.width = (((stepIdx+1)/steps.length)*100) + '%';
+  if(navBack) navBack.hidden = stepIdx === 0;
+  if(navNext) navNext.hidden = last;
+  if(submitBtn) submitBtn.hidden = !last;
+  if(consentBox) consentBox.style.display = last ? '' : 'none';
+  if(formNote) formNote.hidden = !last;
+  const sheet = $('.sheet'); if(sheet) sheet.scrollIntoView({behavior:'smooth', block:'start'});
+}
+if(navNext) navNext.addEventListener('click', ()=>{ if(validateStep(steps[stepIdx])) showStep(stepIdx+1); });
+if(navBack) navBack.addEventListener('click', ()=>showStep(stepIdx-1));
+showStep(0);
 
 /* ---------- submit ---------- */
 $('#form').addEventListener('submit', async e=>{

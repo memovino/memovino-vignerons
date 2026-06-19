@@ -205,17 +205,34 @@
   .drop small{font-size:12px;color:var(--forest-soft);}
   .files{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:8px;}
   .files li{
-    display:flex;align-items:center;gap:10px;
+    display:flex;align-items:center;gap:11px;
     background:#fff;border:1px solid var(--sand);border-radius:9px;
     padding:8px 10px;font-size:13px;
   }
-  .files .fn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .files .fs{color:var(--forest-soft);font-size:12px;flex:0 0 auto;}
+  .thumb-btn{flex:0 0 auto;padding:0;border:0;background:none;cursor:pointer;border-radius:7px;line-height:0;}
+  .thumb{width:50px;height:50px;border-radius:7px;object-fit:cover;display:block;border:1px solid var(--sand);background:var(--field);}
+  .thumb-doc{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;}
+  .thumb-doc svg{stroke:var(--forest);}
+  .thumb-doc em{font-style:normal;font-size:8px;font-weight:700;letter-spacing:.04em;color:var(--forest-soft);}
+  .thumb-btn:hover .thumb{border-color:var(--forest);}
+  .finfo{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;}
+  .files .fn{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .files .fs{color:var(--forest-soft);font-size:12px;}
+  .bar{height:5px;background:var(--sand);border-radius:999px;overflow:hidden;}
+  .bar-fill{height:100%;width:0;background:var(--forest);border-radius:999px;transition:width .15s linear;}
   .files .rm{
     flex:0 0 auto;border:0;background:transparent;color:var(--oxblood);
-    cursor:pointer;font-size:18px;line-height:1;padding:2px 4px;border-radius:6px;
+    cursor:pointer;font-size:18px;line-height:1;padding:2px 4px;border-radius:6px;align-self:flex-start;
   }
   .files .rm:hover{background:#F6EAE7;}
+  .lightbox{position:fixed;inset:0;background:rgba(28,38,32,.86);display:none;align-items:center;justify-content:center;z-index:50;padding:24px;cursor:zoom-out;}
+  .lightbox.open{display:flex;}
+  .lightbox img{max-width:100%;max-height:100%;border-radius:10px;box-shadow:0 30px 80px -20px rgba(0,0,0,.6);}
+  .cuvee-photo-btn{display:inline-flex;align-items:center;gap:10px;background:var(--field);border:1.5px dashed var(--sand-deep);border-radius:var(--radius-sm);padding:8px 12px;cursor:pointer;font-family:var(--ui);}
+  .cuvee-photo-btn:hover{border-color:var(--forest);background:#fff;}
+  .cp-thumb{width:42px;height:42px;border-radius:7px;background:var(--paper);border:1px solid var(--sand);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--forest-soft);overflow:hidden;flex:0 0 auto;cursor:zoom-in;}
+  .cp-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+  .cp-label{font-size:13px;color:var(--forest);font-weight:600;}
 
   /* ---------- REPEATER ROWS ---------- */
   .rows{display:flex;flex-direction:column;gap:14px;}
@@ -594,6 +611,8 @@
     </div>
   </main>
 
+  <div id="lightbox" class="lightbox" aria-hidden="true"><img src="" alt="Aperçu"></div>
+
   <footer class="pagefoot">
     <strong>Memovino</strong> · Connecting Wine Lovers — en partenariat avec l'Association des Vignerons de Wallonie
   </footer>
@@ -613,30 +632,68 @@ const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const fmtSize = b => b < 1024*1024 ? (b/1024).toFixed(0)+' Ko' : (b/1024/1024).toFixed(1)+' Mo';
 
-/* file stores keyed by input name */
+/* file stores keyed by input name — entrées = {file,name,size,type,status,progress,dataUrl,b64} */
 const stores = { photos:[], liste:[], fiches:[] };
+const isImg = t => /^image\//.test(t||'');
+const DOC_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>';
 
+function fileThumb(e){
+  if(isImg(e.type) && e.dataUrl) return `<img class="thumb" src="${e.dataUrl}" alt="">`;
+  const ext = (e.name.split('.').pop()||'').slice(0,4).toUpperCase();
+  return `<span class="thumb thumb-doc">${DOC_ICON}<em>${escapeHtml(ext)}</em></span>`;
+}
 function renderFiles(key){
   const ul = $(`[data-list="${key}"]`);
   ul.innerHTML = '';
-  stores[key].forEach((f,i)=>{
+  stores[key].forEach((e,i)=>{
     const li = document.createElement('li');
-    li.innerHTML = `<span class="fn">${escapeHtml(f.name)}</span><span class="fs">${fmtSize(f.size)}</span><button type="button" class="rm" aria-label="Retirer">&times;</button>`;
+    const right = e.status==='loading'
+      ? `<span class="bar"><span class="bar-fill" style="width:${Math.round((e.progress||0)*100)}%"></span></span>`
+      : `<span class="fs">${fmtSize(e.size)}</span>`;
+    li.innerHTML =
+      `<button type="button" class="thumb-btn" title="Voir en grand">${fileThumb(e)}</button>`+
+      `<span class="finfo"><span class="fn">${escapeHtml(e.name)}</span>${right}</span>`+
+      `<button type="button" class="rm" aria-label="Retirer">&times;</button>`;
+    li.querySelector('.thumb-btn').onclick = ()=>openViewer(e);
     li.querySelector('.rm').onclick = ()=>{ stores[key].splice(i,1); renderFiles(key); };
     ul.appendChild(li);
   });
 }
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
+function openViewer(e){
+  if(isImg(e.type) && e.dataUrl){
+    $('#lightbox img').src = e.dataUrl;
+    $('#lightbox').classList.add('open');
+  } else {
+    window.open(URL.createObjectURL(e.file), '_blank');
+  }
+}
+function readEntry(key, e){
+  const r = new FileReader();
+  r.onprogress = ev=>{ if(ev.lengthComputable){ e.progress = ev.loaded/ev.total;
+    const ul=$(`[data-list="${key}"]`), idx=stores[key].indexOf(e), li=ul&&ul.children[idx];
+    const fill=li&&li.querySelector('.bar-fill'); if(fill) fill.style.width=Math.round(e.progress*100)+'%'; } };
+  r.onload = ()=>{ e.dataUrl=r.result; e.b64=r.result.split(',')[1]; e.status='done'; e.progress=1; renderFiles(key); };
+  r.onerror = ()=>{ e.status='error'; renderFiles(key); };
+  r.readAsDataURL(e.file);
+}
 function addFiles(key, fileList){
   for(const f of fileList){
-    if(f.size > MAX_FILE_MB*1024*1024){
-      alert(`« ${f.name} » dépasse ${MAX_FILE_MB} Mo et n'a pas été ajouté.`);
-      continue;
-    }
-    if(!stores[key].some(x=>x.name===f.name && x.size===f.size)) stores[key].push(f);
+    if(f.size > MAX_FILE_MB*1024*1024){ alert(`« ${f.name} » dépasse ${MAX_FILE_MB} Mo et n'a pas été ajouté.`); continue; }
+    if(stores[key].some(x=>x.name===f.name && x.size===f.size)) continue;
+    const e = {file:f,name:f.name,size:f.size,type:f.type,status:'loading',progress:0};
+    stores[key].push(e); renderFiles(key); readEntry(key,e);
   }
-  renderFiles(key);
+}
+function ensureEncoded(){
+  const pending=[...stores.photos,...stores.liste,...stores.fiches].filter(e=>!e.b64 && e.status!=='error');
+  return Promise.all(pending.map(e=>new Promise(res=>{
+    const t=setInterval(()=>{ if(e.b64||e.status==='error'){clearInterval(t);res();} },50);
+  })));
+}
+function filesPayload(key){
+  return stores[key].filter(e=>e.b64).map(e=>({name:e.name,type:e.type,size:e.size,data:e.b64}));
 }
 
 /* wire dropzones */
@@ -649,6 +706,26 @@ $$('.drop').forEach(drop=>{
   ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev, e=>{e.preventDefault();drop.classList.remove('over');}));
   drop.addEventListener('drop', e=>{ if(e.dataTransfer?.files?.length) addFiles(key, e.dataTransfer.files); });
 });
+$('#lightbox').addEventListener('click', ()=>$('#lightbox').classList.remove('open'));
+
+/* Compression d'image (jolie mais légère) : max 1200 px, JPEG ~0.85 */
+function compressImage(file, maxDim, quality){
+  maxDim = maxDim || 1200; quality = quality || 0.85;
+  return new Promise((resolve, reject)=>{
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = ()=>{
+      let w = img.naturalWidth, h = img.naturalHeight;
+      if(Math.max(w,h) > maxDim){ const r = maxDim/Math.max(w,h); w = Math.round(w*r); h = Math.round(h*r); }
+      const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+      cv.getContext('2d').drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      resolve(cv.toDataURL('image/jpeg', quality));
+    };
+    img.onerror = ()=>{ URL.revokeObjectURL(url); reject(new Error('image')); };
+    img.src = url;
+  });
+}
 
 /* ---------- repeaters ---------- */
 const templates = {
@@ -671,6 +748,11 @@ const templates = {
       <div class="field full"><label>Nez</label><textarea data-c="nez" class="ta-sm" placeholder="Arômes, intensité, complexité…"></textarea></div>
       <div class="field full"><label>Bouche</label><textarea data-c="bouche" class="ta-sm" placeholder="Attaque, structure, longueur, finale…"></textarea></div>
       <div class="field full"><label>Commentaires</label><textarea data-c="commentaires" class="ta-sm" placeholder="Accords mets-vins, potentiel de garde, remarques…"></textarea></div>
+      <div class="field full"><label>Photo de la cuvée <span class="hint">(bouteille / étiquette — optionnel)</span></label>
+        <button type="button" class="cuvee-photo-btn" data-cuvee-photo><span class="cp-thumb">+</span><span class="cp-label">Ajouter une photo</span></button>
+        <input type="hidden" data-c="photo">
+        <input type="file" accept="image/*" class="cuvee-photo-input" hidden>
+      </div>
     </div>`,
   cavistes: (n)=>`
     <span class="row-num">Caviste ${n}</span>
@@ -694,7 +776,31 @@ function addRow(key){
   div.className='row-card';
   div.innerHTML = templates[key](n);
   div.querySelector('.row-del').onclick = ()=>{ div.remove(); renumber(key); };
+  if(key==='cuvees'){
+    const btn=div.querySelector('[data-cuvee-photo]'), inp=div.querySelector('.cuvee-photo-input');
+    const hid=div.querySelector('input[data-c="photo"]'), thumb=div.querySelector('.cp-thumb'), lbl=div.querySelector('.cp-label');
+    btn.addEventListener('click', ()=>inp.click());
+    inp.addEventListener('change', async ev=>{
+      const f=ev.target.files[0]; if(!f) return;
+      if(!/^image\//.test(f.type)){ alert('Merci de choisir une image.'); inp.value=''; return; }
+      lbl.textContent='Compression…';
+      try{
+        const dataUrl = await compressImage(f);
+        hid.value=dataUrl; setCuveeThumb(thumb, dataUrl); lbl.textContent='Changer la photo';
+      }catch(_){
+        const r=new FileReader();
+        r.onload=()=>{ hid.value=r.result; setCuveeThumb(thumb, r.result); lbl.textContent='Changer la photo'; };
+        r.readAsDataURL(f);
+      }
+      inp.value='';
+    });
+  }
   wrap.appendChild(div);
+  return div;
+}
+function setCuveeThumb(thumb, dataUrl){
+  thumb.innerHTML='<img alt="">'; thumb.querySelector('img').src=dataUrl;
+  thumb.onclick=(ev)=>{ ev.stopPropagation(); $('#lightbox img').src=dataUrl; $('#lightbox').classList.add('open'); };
 }
 $$('[data-add]').forEach(b=>b.addEventListener('click',()=>addRow(b.dataset.add)));
 /* Sections cuvées/cavistes vides au départ : on ne force rien, l'onboarding reste fluide. */
@@ -705,8 +811,8 @@ function prefill(d){
   if(!d) return;
   const set=(name,val)=>{ const el=document.querySelector('[name="'+name+'"]'); if(el && val!=null) el.value=val; };
   ['domaine','contact_nom','contact_fonction','contact2_nom','contact2_gsm','email','telephone','site','reseaux','adresse','code_postal','ville','histoire'].forEach(n=>set(n,d[n]));
-  (d.cuvees||[]).forEach(c=>{ addRow('cuvees'); const card=$('[data-repeater="cuvees"] .row-card:last-child'); $$('[data-c]',card).forEach(i=>{ if(c[i.dataset.c]!=null) i.value=c[i.dataset.c]; }); });
-  (d.cavistes||[]).forEach(c=>{ addRow('cavistes'); const card=$('[data-repeater="cavistes"] .row-card:last-child'); $$('[data-c]',card).forEach(i=>{ if(c[i.dataset.c]!=null) i.value=c[i.dataset.c]; }); });
+  (d.cuvees||[]).forEach(c=>{ const card=addRow('cuvees'); $$('[data-c]',card).forEach(i=>{ if(c[i.dataset.c]!=null) i.value=c[i.dataset.c]; }); const hid=card.querySelector('input[data-c="photo"]'); if(hid && hid.value){ const t=card.querySelector('.cp-thumb'), l=card.querySelector('.cp-label'); if(t) setCuveeThumb(t, hid.value); if(l) l.textContent='Changer la photo'; } });
+  (d.cavistes||[]).forEach(c=>{ const card=addRow('cavistes'); $$('[data-c]',card).forEach(i=>{ if(c[i.dataset.c]!=null) i.value=c[i.dataset.c]; }); });
 }
 if(RESUME_ID && SCRIPT_URL && !SCRIPT_URL.includes('PASTE_YOUR')){
   const banner=$('#resumeBanner');
@@ -838,6 +944,7 @@ $('#form').addEventListener('submit', async e=>{
     }
 
     const fd = new FormData(e.target);
+    await ensureEncoded();
     const payload = {
       submittedAt: new Date().toISOString(),
       id: RESUME_ID,
@@ -848,9 +955,9 @@ $('#form').addEventListener('submit', async e=>{
       code_postal: fd.get('code_postal'), ville: fd.get('ville'), histoire: fd.get('histoire'),
       cuvees: collectRows('cuvees'),
       cavistes: collectRows('cavistes'),
-      photos: await Promise.all(stores.photos.map(toB64)),
-      liste:  await Promise.all(stores.liste.map(toB64)),
-      fiches: await Promise.all(stores.fiches.map(toB64)),
+      photos: filesPayload('photos'),
+      liste:  filesPayload('liste'),
+      fiches: filesPayload('fiches'),
     };
 
     $('.submit .lbl').textContent = 'Envoi…';
